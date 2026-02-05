@@ -32,6 +32,19 @@ local function unfreezeChar()
 	hum:ChangeState(Enum.HumanoidStateType.Running)
 end
 
+-- ลอยทันทีเมื่อสคริปต์เริ่ม
+task.spawn(function()
+	if player.Character then
+		task.wait(0.2)
+		freezeChar()
+	end
+
+	player.CharacterAdded:Connect(function()
+		task.wait(0.5)
+		freezeChar()
+	end)
+end)
+
 -- PATHS
 local waveLabel = player.PlayerGui:WaitForChild("HUD")
 	:WaitForChild("Map")
