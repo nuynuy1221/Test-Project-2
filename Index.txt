@@ -8,3 +8,4 @@ Farm.lua
 SkipAndRetry.lua
 Exit.lua
 AntiAFK.lua
+SettingsGame.lua
