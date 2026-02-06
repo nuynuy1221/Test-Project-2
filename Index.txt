@@ -4,6 +4,7 @@ EquipUnits.lua
 BuyItem.lua
 Sell.lua
 EntryMap.lua
+DeleteMap.lua
 Farm.lua
 SkipAndRetry.lua
 Exit.lua
