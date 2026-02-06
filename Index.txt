@@ -1,4 +1,5 @@
 UI.lua
+ReturnAFK.lua
 ClaimItem.lua
 EquipUnits.lua
 BuyItem.lua
