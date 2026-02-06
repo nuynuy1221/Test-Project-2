@@ -73,7 +73,7 @@ task.spawn(function()
         pressRetryButton()
 
         local wave = getWave()
-        if wave >= 30 then
+        if wave >= 140 then
             task.wait(5)
             voteMatchRestart()
         end
