@@ -27,7 +27,7 @@ end
 -- =========================
 -- CONFIG
 -- =========================
-local TARGET_PRESENTS = 100000   -- ✅ จำนวน Presents ที่ต้องการ
+local TARGET_PRESENTS = 200000   -- ✅ จำนวน Presents ที่ต้องการ
 local CHECK_DELAY = 2            -- วินาทีต่อการเช็ค
 local EXIT_DELAY = 4             -- หน่วงก่อนออก Lobby
 
