@@ -80,7 +80,7 @@ local function moveToPrompt(prompt)
 	local targetCF = part.CFrame * CFrame.new(0, 0, -2)
 
 	local distance = (hrp.Position - targetCF.Position).Magnitude
-	local time = math.clamp(distance / 14, 0.05, 1)
+	local time = math.clamp(distance / 60, 0.05, 2)
 
 	local tween = TweenService:Create(
 		hrp,
