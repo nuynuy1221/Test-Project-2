@@ -16,7 +16,7 @@ local function freezeChar()
 	hrp.Anchored = true
 	hum.PlatformStand = false
 	hum.AutoRotate = false
-	hum:ChangeState(Enum.HumanoidStateType.None)
+	hum:ChangeState(Enum.HumanoidStateType.Physics)
 end
 
 local function unfreezeChar()
@@ -91,13 +91,11 @@ local function moveToPrompt(prompt)
 		),
 		{ CFrame = targetCF }
 	)
-    tween.Name = "MoveTween"
-
     if hrp:FindFirstChild("MoveTween") then
-	    hrp.MoveTween:Cancel()
+        hrp.MoveTween:Cancel()
     end
 
-	tween:Play()
+    tween:Play()
 
 	local finished = false
 	tween.Completed:Once(function()
@@ -130,22 +128,18 @@ local function firePrompt(prompt)
 	if PromptBusy then return end
 	PromptBusy = true
 
-	if not prompt or not prompt:IsA("ProximityPrompt") then
-		PromptBusy = false
-		return
-	end
+    pcall(function()
+        unfreezeChar()
+        moveToPrompt(prompt)
 
-	unfreezeChar()
-	moveToPrompt(prompt)
+        if fireproximityprompt then
+            fireproximityprompt(prompt, 1)
+        end
 
-	if fireproximityprompt then
-		fireproximityprompt(prompt, 1)
-	end
+        task.wait(0.05)
+    end)
 
-	task.wait(0.05)
-	freezeChar()
-
-	PromptBusy = false
+    PromptBusy = false
 end
 
 -- ======================
@@ -217,10 +211,12 @@ local function ensureUnitManagerOpen()
 	local gui = player.PlayerGui
 
 	-- ถ้าเปิดอยู่แล้ว ไม่ต้องกด
-	if unitManagerOpened and gui:FindFirstChild("UnitManager") then
-		return true
-	end
+	if gui:FindFirstChild("UnitManager") then
+        unitManagerOpened = true
+        return true
+    end
 
+    unitManagerOpened = false
 
 	local button =
 		gui:FindFirstChild("Guides")
@@ -382,7 +378,7 @@ local function upgradeUnit(unitName, targetLevel)
 		print("⬆️ เริ่มอัพ:", unitNameLabel.ContentText, "uuid:", uuid)
 
 		task.spawn(function()
-			while true do
+			while inGame do
 				local text = upgradeLabel.ContentText
 				if not text then break end
 
@@ -1653,7 +1649,7 @@ task.spawn(function()
         -- =========================
 		-- WAVE 115
 		-- =========================
-		if wave >= 115 and not Executed[1150] then
+		if wave >= 115 and not Executed[115] then
 			Executed[115] = true
 
 
@@ -1778,4 +1774,22 @@ task.spawn(function()
             buyLane(7)
 	    end
     end
+end)
+
+local lastWave = nil
+
+task.spawn(function()
+	while true do
+		task.wait(0.2)
+
+		local wave = getWave() -- หรือ wave ที่คุณมีอยู่แล้ว
+		if not wave then continue end
+
+		if wave ~= lastWave then
+			-- 🔔 wave เปลี่ยน
+			print("🌊 Wave : ", lastWave, "→", wave)
+
+			lastWave = wave
+		end
+	end
 end)
