@@ -403,6 +403,21 @@ local function upgradeUnit(unitName, targetLevel)
 end
 
 -- ======================
+-- UUID FINDER
+-- ======================
+local function findUnitUUID(unitName)
+	if not ensureUnitManagerOpen() then return nil end
+
+	for _, frame in ipairs(player.PlayerGui.UnitManager.Holder.List:GetChildren()) do
+		local unitRoot = frame:FindFirstChild("Unit")
+		if unitRoot and unitRoot:FindFirstChild(unitName) then
+			return frame.Name
+		end
+	end
+	return nil
+end
+
+-- ======================
 -- LANES
 -- ======================
 local function buyLane(num)
@@ -437,8 +452,8 @@ local function startBarricadeLoop()
 				task.wait(0.3)
 			end
 
-			-- ⏱ รอ 15 วินาที
-			for i = 1, 15 do
+			-- ⏱ รอ 20 วินาที
+			for i = 1, 20 do
 				if not BarricadeLoopRunning then
 					return
 				end
@@ -447,7 +462,7 @@ local function startBarricadeLoop()
 		end
 	end)
 
-	print("🧱 เริ่ม Auto ซื้อ Barricade ทุก 15 วินาที")
+	print("🧱 เริ่ม Auto ซื้อ Barricade ทุก 20 วินาที")
 end
 
 -- ======================
@@ -848,24 +863,24 @@ task.spawn(function()
 		-- =========================
 		if wave >= 30 and not Executed[30] then
 			Executed[30] = true
-			for i = 1, 100 do
+			for i = 1, 200 do
 				buyBox()
 				task.wait(0.1)
 			end
         end
 
         -- =========================
-		-- WAVE 34
+		-- WAVE 36
 		-- =========================
-		if wave >= 34 and not Executed[34] then
-			Executed[34] = true
+		if wave >= 36 and not Executed[36] then
+			Executed[36] = true
 
 
             placeUnitBurst(
 	            "Koguro (Unsealed)",
 	            "235",
 	            {
-            		Vector3.new(5.4, 253, 97.4)
+            		Vector3.new(6.1883745193481445, 253.0923614501953, 100.23284912109375)
             	},
 	            9,
 	            2
@@ -874,7 +889,7 @@ task.spawn(function()
 	            "Lich King (Ruler)",
 	            "338",
 	            {
-            		Vector3.new(5.4, 253, 97.4)
+            		Vector3.new(5.769950866699219, 253.0923614501953, 97.12089538574219)
             	},
 	            9,
 	            2
@@ -883,7 +898,7 @@ task.spawn(function()
 	            "Iscanur (Pride)",
 	            "270",
 	            {
-            		Vector3.new(5.4, 253, 97.4)
+            		Vector3.new(5.73417329788208, 253.0923614501953, 93.96935272216797)
             	},
 	            9,
 	            2
@@ -892,7 +907,7 @@ task.spawn(function()
 	            "Ice Queen (Release)",
 	            "363",
 	            {
-            		Vector3.new(5.4, 253, 97.4)
+            		Vector3.new(-21.437185287475586, 252.0919647216797, 101.15544891357422)
             	},
 	            9,
 	            2
@@ -919,7 +934,7 @@ task.spawn(function()
 		-- =========================
 		if wave >= 38 and not Executed[38] then
 			Executed[38] = true
-			for i = 1, 100 do
+			for i = 1, 150 do
 				buyBox()
 				task.wait(0.1)
 			end
@@ -936,7 +951,7 @@ task.spawn(function()
 	            "Koguro (Unsealed)",
 	            "235",
 	            {
-            		Vector3.new(3.9, 253, 91.9)
+            		Vector3.new(6.1883745193481445, 253.0923614501953, 100.23284912109375)
             	},
 	            10,
 	            2
@@ -945,7 +960,7 @@ task.spawn(function()
 	            "Lich King (Ruler)",
 	            "338",
 	            {
-            		Vector3.new(3.9, 253, 91.9)
+            		Vector3.new(5.769950866699219, 253.0923614501953, 97.12089538574219)
             	},
 	            10,
 	            2
@@ -954,7 +969,7 @@ task.spawn(function()
 	            "Iscanur (Pride)",
 	            "270",
 	            {
-            		Vector3.new(3.9, 253, 91.9)
+            		Vector3.new(5.73417329788208, 253.0923614501953, 93.96935272216797)
             	},
 	            10,
 	            2
@@ -963,7 +978,7 @@ task.spawn(function()
 	            "Ice Queen (Release)",
 	            "363",
 	            {
-            		Vector3.new(3.9, 253, 91.9)
+            		Vector3.new(-21.437185287475586, 252.0919647216797, 101.15544891357422)
             	},
 	            10,
 	            2
@@ -975,7 +990,7 @@ task.spawn(function()
 		-- =========================
 		if wave >= 43 and not Executed[43] then
 			Executed[43] = true
-			for i = 1, 100 do
+			for i = 1, 150 do
 				buyBox()
 				task.wait(0.1)
 			end
@@ -1006,7 +1021,7 @@ task.spawn(function()
 	            "Koguro (Unsealed)",
 	            "235",
 	            {
-            		Vector3.new(3.8, 253, 102.5)
+            		Vector3.new(6.1883745193481445, 253.0923614501953, 100.23284912109375)
             	},
 	            11,
 	            2
@@ -1015,7 +1030,7 @@ task.spawn(function()
 	            "Lich King (Ruler)",
 	            "338",
 	            {
-            		Vector3.new(3.8, 253, 102.5)
+            		Vector3.new(5.769950866699219, 253.0923614501953, 97.12089538574219)
             	},
 	            11,
 	            2
@@ -1024,7 +1039,7 @@ task.spawn(function()
 	            "Iscanur (Pride)",
 	            "270",
 	            {
-            		Vector3.new(3.8, 253, 102.5)
+            		Vector3.new(5.73417329788208, 253.0923614501953, 93.96935272216797)
             	},
 	            11,
 	            2
@@ -1033,7 +1048,7 @@ task.spawn(function()
 	            "Ice Queen (Release)",
 	            "363",
 	            {
-                    Vector3.new(3.8, 253, 102.5)
+                    Vector3.new(-21.437185287475586, 252.0919647216797, 101.15544891357422)
             	},
 	            11,
 	            2
@@ -1041,10 +1056,10 @@ task.spawn(function()
 	    end
 
         -- =========================
-		-- WAVE 46
+		-- WAVE 47
 		-- =========================
-		if wave >= 46 and not Executed[46] then
-			Executed[46] = true
+		if wave >= 47 and not Executed[47] then
+			Executed[47] = true
 			for i = 1, 3 do
 				buyMonach()
 				task.wait(0.4)
@@ -1059,7 +1074,7 @@ task.spawn(function()
 		-- =========================
 		if wave >= 48 and not Executed[48] then
 			Executed[48] = true
-			for i = 1, 50 do
+			for i = 1, 100 do
 				buyBox()
 				task.wait(0.1)
 			end
@@ -1090,7 +1105,7 @@ task.spawn(function()
 	            "Koguro (Unsealed)",
 	            "235",
 	            {
-            		Vector3.new(8.1, 253, 97.3)
+            		Vector3.new(6.1883745193481445, 253.0923614501953, 100.23284912109375)
             	},
 	            12,
 	            2
@@ -1099,7 +1114,7 @@ task.spawn(function()
 	            "Lich King (Ruler)",
 	            "338",
 	            {
-            		Vector3.new(8.1, 253, 97.3)
+            		Vector3.new(5.769950866699219, 253.0923614501953, 97.12089538574219)
             	},
 	            12,
 	            2
@@ -1108,7 +1123,7 @@ task.spawn(function()
 	            "Iscanur (Pride)",
 	            "270",
 	            {
-            		Vector3.new(8.1, 253, 97.3)
+            		Vector3.new(5.73417329788208, 253.0923614501953, 93.96935272216797)
             	},
 	            12,
 	            2
@@ -1117,7 +1132,7 @@ task.spawn(function()
 	            "Ice Queen (Release)",
 	            "363",
 	            {
-                    Vector3.new(8.1, 253, 97.3)
+                    Vector3.new(-21.437185287475586, 252.0919647216797, 101.15544891357422)
             	},
 	            12,
 	            2
@@ -1157,10 +1172,10 @@ task.spawn(function()
 		end
 
         -- =========================
-		-- WAVE 60
+		-- WAVE 62
 		-- =========================
-		if wave >= 60 and not Executed[60] then
-			Executed[60] = true
+		if wave >= 62 and not Executed[62] then
+			Executed[62] = true
 			for i = 1, 3 do
 				buyMonach()
 				task.wait(0.4)
@@ -1171,10 +1186,10 @@ task.spawn(function()
 		end
 
         -- =========================
-		-- WAVE 61
+		-- WAVE 64
 		-- =========================
-		if wave >= 61 and not Executed[61] then
-			Executed[61] = true
+		if wave >= 64 and not Executed[64] then
+			Executed[64] = true
 			buyMonach()
 			task.wait(1)
 
@@ -1201,10 +1216,10 @@ task.spawn(function()
 		end
 
         -- =========================
-		-- WAVE 62
+		-- WAVE 66
 		-- =========================
-		if wave >= 62 and not Executed[62] then
-			Executed[62] = true
+		if wave >= 66 and not Executed[66] then
+			Executed[66] = true
 
             placeUnit(
 	            "Ice Manipulator (Admiral)",
@@ -1236,16 +1251,16 @@ task.spawn(function()
             task.wait(1)
 		end
 
-		if wave >= 62 and not Executed["IM8"] then
+		if wave >= 66 and not Executed["IM8"] then
 			Executed["IM8"] = true  
 			upgradeUnit("Ice Manipulator (Admiral)", 8)
 		end
 
         -- =========================
-		-- WAVE 64
+		-- WAVE 69
 		-- =========================
-		if wave >= 64 and not Executed[64] then
-			Executed[64] = true
+		if wave >= 69 and not Executed[69] then
+			Executed[69] = true
 
             placeUnit(
 	            "Trash Gamer (Twin Blades)",
@@ -1270,16 +1285,16 @@ task.spawn(function()
             task.wait(1)
 		end
 
-		if wave >= 64 and not Executed["WB9"] then
+		if wave >= 69 and not Executed["WB9"] then
 			Executed["WB9"] = true  
 			upgradeUnit("Trash Gamer (Twin Blades)", 9)
 		end
 
         -- =========================
-		-- WAVE 66
+		-- WAVE 72
 		-- =========================
-		if wave >= 66 and not Executed[66] then
-			Executed[66] = true
+		if wave >= 72 and not Executed[72] then
+			Executed[72] = true
 
             placeUnit(
 	            "Armored Mage (Requip)",
@@ -1304,16 +1319,27 @@ task.spawn(function()
             task.wait(1)
 		end
 
-		if wave >= 66 and not Executed["AM12"] then
+		if wave >= 72 and not Executed["AM12"] then
 			Executed["AM12"] = true  
 			upgradeUnit("Armored Mage (Requip)", 12)
 		end
 
         -- =========================
-		-- WAVE 68
+		-- WAVE 73
 		-- =========================
-		if wave >= 68 and not Executed[68] then
-			Executed[68] = true
+		if wave >= 73 and not Executed[73] then
+			Executed[73] = true
+			for i = 1, 200 do
+				buyBox()
+				task.wait(0.1)
+			end
+        end
+
+        -- =========================
+		-- WAVE 75
+		-- =========================
+		if wave >= 75 and not Executed[75] then
+			Executed[75] = true
 
             placeUnit(
 	            "Company Captain (Hybrid)",
@@ -1338,16 +1364,61 @@ task.spawn(function()
             task.wait(1)
 		end
 
-		if wave >= 68 and not Executed["CC11"] then
+		if wave >= 75 and not Executed["CC11"] then
 			Executed["CC11"] = true
 			upgradeUnit("Company Captain (Hybrid)", 11)
 		end
 
         -- =========================
-		-- WAVE 75
+		-- WAVE 77
 		-- =========================
-		if wave >= 75 and not Executed[75] then
-			Executed[75] = true
+		if wave >= 77 and not Executed[77] then
+			Executed[77] = true
+
+
+            placeUnitBurst(
+	            "Koguro (Unsealed)",
+	            "235",
+	            {
+            		Vector3.new(6.1883745193481445, 253.0923614501953, 100.23284912109375)
+            	},
+	            29,
+	            2
+            )
+            placeUnitBurst(
+	            "Lich King (Ruler)",
+	            "338",
+	            {
+            		Vector3.new(5.769950866699219, 253.0923614501953, 97.12089538574219)
+            	},
+	            29,
+	            2
+            )
+            placeUnitBurst(
+	            "Iscanur (Pride)",
+	            "270",
+	            {
+            		Vector3.new(5.73417329788208, 253.0923614501953, 93.96935272216797)
+                },
+            	29,
+	            2
+            )
+            placeUnitBurst(
+	            "Ice Queen (Release)",
+	            "363",
+	            {
+                    Vector3.new(-21.437185287475586, 252.0919647216797, 101.15544891357422)
+            	},
+	            29,
+	            2
+            )
+	    end
+
+        -- =========================
+		-- WAVE 78
+		-- =========================
+		if wave >= 78 and not Executed[78] then
+			Executed[78] = true
 			buyMonach()
 			task.wait(1)
 
@@ -1374,10 +1445,40 @@ task.spawn(function()
 		end
 
         -- =========================
+		-- WAVE 79
+		-- =========================
+		if wave >= 79 and not Executed[79] then
+			Executed[79] = true
+			upgradeUnit("Koguro (Unsealed)", 12)
+            task.wait(1)
+            upgradeUnit("Lich King (Ruler)", 13)
+            task.wait(1)
+            upgradeUnit("Iscanur (Pride)", 15)
+            task.wait(1)
+            upgradeUnit("Ice Queen (Release)", 15)
+            task.wait(1)
+		end
+
+        -- =========================
 		-- WAVE 80
 		-- =========================
 		if wave >= 80 and not Executed[80] then
 			Executed[80] = true
+            MonachApplied = {}
+			for i = 1, 3 do
+				buyMonach()
+				task.wait(0.4)
+
+				applyMonachToUnit("Rabbit Hero (Guts)", 1)
+				task.wait(0.3)
+			end
+		end
+
+        -- =========================
+		-- WAVE 82
+		-- =========================
+		if wave >= 82 and not Executed[82] then
+			Executed[82] = true
 			for i = 1, 4 do
 				buyMonach()
 				task.wait(0.4)
@@ -1388,10 +1489,10 @@ task.spawn(function()
 		end
 
         -- =========================
-		-- WAVE 85
+		-- WAVE 86
 		-- =========================
-		if wave >= 85 and not Executed[85] then
-			Executed[85] = true
+		if wave >= 86 and not Executed[86] then
+			Executed[86] = true
 			for i = 1, 3 do
 				buyMonach()
 				task.wait(0.4)
@@ -1434,6 +1535,7 @@ task.spawn(function()
 		-- =========================
 		if wave >= 100 and not Executed[100] then
 			Executed[100] = true
+            MonachApplied = {}
 			buyMonach()
 			task.wait(1)
 
@@ -1481,6 +1583,7 @@ task.spawn(function()
 			end
             task.wait(1)
             for i = 1, 3 do
+
 				buyMonach()
 				task.wait(0.4)
 
@@ -1513,7 +1616,7 @@ task.spawn(function()
 	            "Ice Queen (Release)",
 	            "363",
 	            {
-                    Vector3.new(-11.155033111572266, 253.09237670898438, 95.13072204589844)
+                    Vector3.new(-21.148853302001953, 252.0919647216797, 97.92547607421875)
             	},
 	            26,
 	            2
@@ -1523,20 +1626,134 @@ task.spawn(function()
 	            "Ice Queen (Release)",
 	            "363",
 	            {
-                    Vector3.new(-11.599004745483398, 253.0923614501953, 98.88797760009766)
+                    Vector3.new(-20.91863441467285, 252.0919647216797, 94.68634796142578)
             	},
-	            26,
+	            27,
 	            2
             )
             task.wait(1)
             upgradeUnit("Ice Queen (Release)", 15)
             task.wait(1)
-            applyMonachToUnit("Ice Queen (Release)", 1)
-            task.wait(10)
-            applyMonachToUnit("Ice Queen (Release)", 1)
-            task.wait(1)
         end
+
+        -- =========================
+		-- WAVE 111
+		-- =========================
+		if wave >= 111 and not Executed[111] then
+			Executed[111] = true
+			for i = 1, 3 do
+				buyMonach()
+				task.wait(0.4)
+
+				applyMonachToUnit("Ice Queen (Release)", 1)
+				task.wait(0.3)
+			end
+        end
+
+        -- =========================
+		-- WAVE 115
+		-- =========================
+		if wave >= 115 and not Executed[1150] then
+			Executed[115] = true
+
+
+            placeUnitBurst(
+	            "Koguro (Unsealed)",
+	            "235",
+	            {
+            		Vector3.new(6.1883745193481445, 253.0923614501953, 100.23284912109375)
+            	},
+	            28,
+	            2
+            )
+            placeUnitBurst(
+	            "Lich King (Ruler)",
+	            "338",
+	            {
+            		Vector3.new(5.769950866699219, 253.0923614501953, 97.12089538574219)
+            	},
+	            28,
+	            2
+            )
+            placeUnitBurst(
+	            "Iscanur (Pride)",
+	            "270",
+	            {
+            		Vector3.new(5.73417329788208, 253.0923614501953, 93.96935272216797)
+            	},
+	            28,
+	            2
+            )
+            placeUnitBurst(
+	            "Ice Queen (Release)",
+	            "363",
+	            {
+                    Vector3.new(-21.437185287475586, 252.0919647216797, 101.15544891357422)
+            	},
+	            28,
+	            2
+            )
+	    end
+
+        -- =========================
+		-- WAVE 116
+		-- =========================
+		if wave >= 116 and not Executed[116] then
+			Executed[116] = true
+			upgradeUnit("Koguro (Unsealed)", 12)
+            task.wait(1)
+            upgradeUnit("Lich King (Ruler)", 13)
+            task.wait(1)
+            upgradeUnit("Iscanur (Pride)", 15)
+            task.wait(1)
+            upgradeUnit("Ice Queen (Release)", 15)
+            task.wait(1)
+		end
+
+        -- =========================
+		-- WAVE 117
+		-- =========================
+		if wave >= 117 and not Executed[117] then
+			Executed[117] = true
+            MonachApplied = {}
+			buyMonach()
+			task.wait(1)
+
+			applyMonachToUnit("Lich King (Ruler)", 1)
+			task.wait(1)
+
+            buyMonach()
+			task.wait(1)
+
+			applyMonachToUnit("Koguro (Unsealed)", 1)
+			task.wait(1)
+            
+            buyMonach()
+			task.wait(1)
+
+			applyMonachToUnit("Ice Queen (Release)", 1)
+			task.wait(1)
+            
+            buyMonach()
+			task.wait(1)
+
+			applyMonachToUnit("Iscanur (Pride)", 1)
+			task.wait(1)
+		end
         
+        -- =========================
+		-- WAVE 118
+		-- =========================
+        if wave >= 118 and not Executed[118] then
+	        Executed[118] = true
+
+	        local uuid = findUnitUUID("Koguro (Unsealed)")
+	        if uuid then
+	        	ReplicatedStorage.Networking.Units["Update 6.5"].Koguro_DomainEvent
+	        		:FireServer("ToggleAuto", uuid)
+	        end
+        end
+
         -- =========================
 		-- WAVE 125
 		-- =========================
@@ -1546,16 +1763,18 @@ task.spawn(function()
 		end
 
         -- =========================
-		-- WAVE 139
+		-- WAVE 159
 		-- =========================
-		if wave >= 139 and not Executed[139] then
-			Executed[139] = true
+		if wave >= 159 and not Executed[159] then
+			Executed[159] = true
             buyLane(4)
-            task.wait(1)
 			buyLane(5)
-            task.wait(1)
             buyLane(6)
-            task.wait(1)
+            buyLane(7)
+            task.wait(10)
+            buyLane(4)
+			buyLane(5)
+            buyLane(6)
             buyLane(7)
 	    end
     end
