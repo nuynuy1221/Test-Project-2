@@ -42,6 +42,9 @@ local UnitEvent = ReplicatedStorage:WaitForChild("Networking"):WaitForChild("Uni
 
 -- STATE
 local Executed = {}
+local ExecutedGutReady1 = false
+local ExecutedGutReady2 = false
+
 local inGame = false
 local MonachApplied = {} -- [uuid] = true
 local Upgrading = {} -- [uuid] = true
@@ -569,6 +572,8 @@ task.spawn(function()
 			if inGame then
 				warn("🔄 Wave 0 → รีรอบเกม รีเซ็ตทุกอย่าง")
 				Executed = {}
+				ExecutedGutReady1 = false
+                ExecutedGutReady2 = false
                 MonachApplied = {}
 				inGame = false
                 unitManagerOpened = false
@@ -593,7 +598,9 @@ task.spawn(function()
 			buyGuts()
 			buyGuts()
             task.wait(1)
+		end
 
+		if wave >= 1 and not ExecutedGutReady1 then
 			-- ตัวที่ 1
 			placeUnit(
 				"Rabbit Hero (Guts)",
@@ -601,17 +608,7 @@ task.spawn(function()
 				Vector3.new(20.8433,252.5818,95.2065),
 				1
 			)
-            task.wait(1)
-            placeUnit(
-				"Rabbit Hero (Guts)",
-				"364:Evolved",
-				Vector3.new(20.8433,252.5818,95.2065),
-				1
-			)
-
-			-- ⏱ รอ 2 วินาทีเต็ม
-			task.wait(2)
-
+			task.wait(1)
 			-- ตัวที่ 2
 			placeUnit(
 				"Rabbit Hero (Guts)",
@@ -619,24 +616,7 @@ task.spawn(function()
 				Vector3.new(20.6082,252.5819,99.6623),
 				2
 			)
-            task.wait(3)
-
-			-- ตัวที่ 2 ซ้ำ
-			placeUnit(
-				"Rabbit Hero (Guts)",
-				"364:Evolved",
-				Vector3.new(20.6082,252.5819,99.6623),
-				2
-			)
-            task.wait(5)
-
-			-- ตัวที่ 2 ซ้ำ
-			placeUnit(
-				"Rabbit Hero (Guts)",
-				"364:Evolved",
-				Vector3.new(20.6082,252.5819,99.6623),
-				2
-			)
+			task.wait(1.5)
 		end
 
         -- =========================
@@ -644,6 +624,8 @@ task.spawn(function()
 		-- =========================
 		if wave >= 2 and not Executed[2] then
 			Executed[2] = true
+			ExecutedGutReady1 = true
+			buyGuts()
 			buyGuts()
 
             placeUnit(
@@ -654,11 +636,22 @@ task.spawn(function()
 			)
         end
 
+		if wave >= 2 and not ExecutedGutReady2 then
+            placeUnit(
+				"Rabbit Hero (Guts)",
+				"364:Evolved",
+				Vector3.new(18.577674865722656, 252.5818634033203, 97.36162567138672),
+				3
+			)
+			task.wait(1.5)
+        end
+
 		-- =========================
 		-- WAVE 3
 		-- =========================
 		if wave >= 3 and not Executed[3] then
 			Executed[3] = true
+			ExecutedGutReady2 = true
 			buyWagon()
 			buyWagon()
 			buyWagon()
@@ -1355,6 +1348,7 @@ task.spawn(function()
 		-- =========================
 		if wave >= 101 and not Executed[101] then
 			Executed[101] = true
+			MonachApplied = {}
 			for i = 1, 3 do
 				buyMonach()
 				task.wait(0.4)
