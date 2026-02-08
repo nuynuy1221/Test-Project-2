@@ -222,11 +222,11 @@ while true do
                 if Config.BuyMemoria and not hasMemoria then
                     print("🎴 ยังไม่มี Ice Queen's Rest → Summon Memoria x10")
                     summonEvent:FireServer(unpack(memoriaArgs))
-                    task.wait(2.5)
+                    task.wait(1)
                 else
                     print("❄️ Summon Winter26 x10")
                     summonEvent:FireServer(unpack(summonArgs))
-                    task.wait(2)
+                    task.wait(1)
                 end
             else
                 print("🎮 Presents26 ไม่พอ → เข้า Winter ฟาร์ม")
