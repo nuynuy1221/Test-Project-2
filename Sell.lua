@@ -54,9 +54,9 @@ task.spawn(function()
                 local memoriaNameObj = main:FindFirstChild("MemoriaName")
                 if not memoriaNameObj then continue end
                
-                local rarityObj = main:FindFirstChild("Rare") or main:FindFirstChild("Epic") or main:FindFirstChild("Legendary")
+                local rarityObj = main:FindFirstChild("Rare") or main:FindFirstChild("Epic") or main:FindFirstChild("Legendary") or main:FindFirstChild("Mythic")
                
-                if rarityObj and (rarityObj.Name == "Rare" or rarityObj.Name == "Epic" or rarityObj.Name == "Legendary") then
+                if rarityObj and (rarityObj.Name == "Rare" or rarityObj.Name == "Epic" or rarityObj.Name == "Legendary" or rarityObj.Name == "Mythic") then
                     table.insert(memoriaToSell, guid)
                 end
             end
@@ -67,7 +67,7 @@ task.spawn(function()
                 MemoriaEvent:FireServer("Sell", memoriaToSell)
             end)
             if ok then
-                print("ขาย Memoria Rare/Epic สำเร็จ จำนวน " .. #memoriaToSell .. " ชิ้น")
+                print("ขาย Memoria Rare -> Mythic สำเร็จ จำนวน " .. #memoriaToSell .. " ชิ้น")
             end
         end
        
