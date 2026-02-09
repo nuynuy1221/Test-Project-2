@@ -3,6 +3,7 @@ ReturnAFK.lua
 ClaimItem.lua
 EquipUnits.lua
 BuyItem.lua
+UnitInventory.lua
 Sell.lua
 EntryMap.lua
 DeleteMap.lua
