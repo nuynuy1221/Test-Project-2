@@ -3,20 +3,32 @@ task.wait(1)
 
 local targetPlace = 16277809958
 if game.PlaceId ~= targetPlace then
-    warn("PlaceId ไม่ตรง ไม่ลบแมพให้")
-    return
-end
+	local lobby = workspace:FindFirstChild("MainLobby")
+    if not lobby then
+        warn("[MainLobby] not found")
+        return
+    end
 
-local map = workspace:WaitForChild("Map")
+    for _, obj in ipairs(lobby:GetChildren()) do
+        pcall(function()
+            obj:Destroy()
+        end)
+    end
 
-local assets = map:FindFirstChild("Assets")
+    print("[MainLobby] Cleared all")
+        return
+    end
+
+local map2 = workspace:WaitForChild("Map")
+
+local assets = map2:FindFirstChild("Assets")
 if assets then
 	for _, obj in ipairs(assets:GetChildren()) do
 		obj:Destroy()
 	end
 end
 
-local skellingtons = map:FindFirstChild("Skellingtons")
+local skellingtons = map2:FindFirstChild("Skellingtons")
 if skellingtons then
 	skellingtons:Destroy()
 end
