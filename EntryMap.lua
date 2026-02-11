@@ -135,38 +135,45 @@ local function hasIceQueen()
 end
 
 -- =========================
--- เช็ค Memoria : Ice Queen's Rest
+-- เช็ค Memoria : Ice Queen's Rest (FIX ให้ตรงกับ Horst Script)
 -- =========================
 local function hasIceQueenRest()
-    local success, items = pcall(function()
-        return playerGui
-            :WaitForChild("Windows", 8)
-            :WaitForChild("GlobalInventory", 8)
-            .Holder.LeftContainer.FakeScrollingFrame.Items:GetChildren()
-    end)
-
-    if not success or not items then
-        warn("ไม่เจอ Inventory Items")
+    if game.PlaceId ~= 16146832113 then
         return false
     end
 
-    -- Items จะมีหลายกล่อง และแต่ละกล่องมี CacheContainer ซ้ำ ๆ
-    for _, group in ipairs(items) do
-        for _, cache in ipairs(group:GetChildren()) do
-            if cache.Name == "CacheContainer" then
-                for _, group in ipairs(items) do
-                    for _, uuid in ipairs(group:GetChildren()) do
-                        local ok, label = pcall(function()
-                            return uuid.Container.Holder.Main.MemoriaName
-                        end)
+    local items
+    local start = tick()
 
-                        if ok and label then
-                            local name = (label.ContentText or ""):gsub("%s+$","")
-                            if name == "Ice Queen's Rest" then
-                                return true
-                            end
-                        end
-                    end
+    -- รอ Items โหลด (เหมือนสคริป Horst)
+    repeat
+        local ok
+        ok, items = pcall(function()
+            return playerGui.Windows.GlobalInventory.Holder
+                .LeftContainer.FakeScrollingFrame.Items:GetChildren()
+        end)
+        task.wait(0.5)
+    until (items and #items > 0) or tick() - start > 15
+
+    if not items then
+        warn("❌ Items not loaded (Memoria)")
+        return false
+    end
+
+    -- ✅ Scan ทุก group → uuid → MemoriaName
+    for _, group in ipairs(items) do
+        for _, uuid in ipairs(group:GetChildren()) do
+            local ok2, label = pcall(function()
+                return uuid.Container.Holder.Main.MemoriaName
+            end)
+
+            if ok2 and label then
+                local name = (label.ContentText or label.Text or "")
+                    :gsub("%s+$","")
+
+                if name == "Ice Queen's Rest" then
+                    print("✅ FOUND Ice Queen's Rest")
+                    return true
                 end
             end
         end
