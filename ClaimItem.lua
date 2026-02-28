@@ -34,7 +34,7 @@ local NewPlayerRewardsEvent = Networking:WaitForChild("NewPlayerRewardsEvent")
 local APiratesWelcomeEvent = Networking:WaitForChild("APiratesWelcomeEvent", 5)  -- เพิ่มสำหรับ A Pirates Welcome
 --============================================--
 
-local DELAY = 0.1
+local DELAY = 0.2
 
 local function safeFire(remote, args)
     local ok, err = pcall(function()
@@ -88,7 +88,7 @@ for day = 1, 7 do
 end
 
 --================ MILESTONES ===================
-for _, milestone in ipairs({5, 10}) do
+for _, milestone in ipairs({5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75}) do
     safeFire(MilestonesEvent, {"Claim", milestone})
 end
 
