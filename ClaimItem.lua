@@ -54,10 +54,9 @@ task.spawn(function()
     end
 
     local codes = {
-        "ALMOST100K",
-        "ItsCold",
-        "Memoria",
-        "Winter26"
+        "Chainsaws",
+        "1WeekDelay",
+        "NoCustoms"
     }
 
     print("เริ่มรีดีมโค้ด...")
