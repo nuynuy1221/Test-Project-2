@@ -12,3 +12,4 @@ SkipAndRetry.lua
 Exit.lua
 AntiAFK.lua
 SettingsGame.lua
+SkipTutorial.lua
