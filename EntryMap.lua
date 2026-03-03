@@ -247,5 +247,5 @@ while true do
         warn("❌ Error ใน loop:", err)
     end
 
-    task.wait(1.5)
+    task.wait(0.2)
 end
