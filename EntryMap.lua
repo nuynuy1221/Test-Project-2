@@ -11,6 +11,7 @@ end
 if getgenv().Config == nil then
     getgenv().Config = {
         BuyMemoria = false
+
     }
 end
 
@@ -98,34 +99,37 @@ end
 -- เช็ค Ice Queen (Release)
 -- =========================
 local function hasIceQueen()
-    local success, items = pcall(function()
-        return playerGui
-            :WaitForChild("Windows", 8)
-            :WaitForChild("GlobalInventory", 8)
-            .Holder.LeftContainer.FakeScrollingFrame.Items:GetChildren()
-    end)
 
-    if not success or not items then
-        warn("ไม่เจอ Inventory Items")
+    if game.PlaceId ~= 16146832113 then
         return false
     end
 
-    for _, group in ipairs(items) do
-        for _, cache in ipairs(group:GetChildren()) do
-            if cache.Name == "CacheContainer" then
-                for _, group in ipairs(items) do
-                    for _, uuid in ipairs(group:GetChildren()) do
-                        local ok, label = pcall(function()
-                            return uuid.Container.Holder.Main.UnitName
-                        end)
+    local items
+    local start = tick()
 
-                        if ok and label then
-                            local name = (label.ContentText or label.Text or ""):gsub("%s+$","")
-                            if name == "Ice Queen (Release)" then
-                                return true
-                            end
-                        end
-                    end
+    repeat
+        local ok
+        ok, items = pcall(function()
+            return playerGui.Windows.GlobalInventory.Holder
+                .LeftContainer.FakeScrollingFrame.Items
+        end)
+        task.wait(0.5)
+    until items or tick() - start > 15
+
+    if not items then
+        warn("[IceQueen] ❌ Items not loaded")
+        return false
+    end
+
+    for _, cache in ipairs(items:GetChildren()) do
+        if cache.Name == "CacheContainer" then
+            for _, uuid in ipairs(cache:GetChildren()) do
+                local holder = uuid:FindFirstChild("Container")
+                    and uuid.Container:FindFirstChild("Holder")
+
+                if holder and holder:FindFirstChild("Ice Queen (Release)") then
+                    print("✅ FOUND Ice Queen (Release)")
+                    return true
                 end
             end
         end
@@ -138,6 +142,7 @@ end
 -- เช็ค Memoria : Ice Queen's Rest (FIX ให้ตรงกับ Horst Script)
 -- =========================
 local function hasIceQueenRest()
+
     if game.PlaceId ~= 16146832113 then
         return false
     end
@@ -145,7 +150,6 @@ local function hasIceQueenRest()
     local items
     local start = tick()
 
-    -- รอ Items โหลด (เหมือนสคริป Horst)
     repeat
         local ok
         ok, items = pcall(function()
@@ -156,11 +160,10 @@ local function hasIceQueenRest()
     until (items and #items > 0) or tick() - start > 15
 
     if not items then
-        warn("❌ Items not loaded (Memoria)")
+        warn("[Memoria] ❌ Items not loaded")
         return false
     end
 
-    -- ✅ Scan ทุก group → uuid → MemoriaName
     for _, group in ipairs(items) do
         for _, uuid in ipairs(group:GetChildren()) do
             local ok2, label = pcall(function()
@@ -201,6 +204,7 @@ local memoriaArgs = {"SummonMany", "WinterMemoria", 10}
 -- ลูปหลัก (เพิ่ม pcall ห่อเพื่อป้องกัน crash)
 -- =========================
 while true do
+    local DelayCheck = 0.2
     local success, err = pcall(function()
         local level = getLevel()
         local presents = getPresents26()
@@ -219,27 +223,40 @@ while true do
         -- ❌ ไม่เข้า Story แล้ว ไม่สน Level
         -- ทำแต่ Winter เท่านั้น
 
-        if hasUnit then
-            print("✅ มี Ice Queen (Release) → เริ่ม Winter")
-            task.wait(60)
-            GoWinter()
+        if hasUnit and hasMemoria then
+            print("✅ มีของครบ อยู่เฉยๆ")
+            DelayCheck = 600
 
-        else
-            if presents >= 1500 then
-                if Config.BuyMemoria and not hasMemoria then
-                    print("🎴 ยังไม่มี Ice Queen's Rest → Summon Memoria x10")
+        elseif presents >= 1500 then
+            if hasMemoria and not hasUnit then
+                print("⁉️ มีแค่ Memoria")
+                summonEvent:FireServer(unpack(summonArgs))
+                task.wait(1)
+            elseif not hasMemoria and hasUnit then
+                if Config.BuyMemoria then
+                    print("⁉️ มีแค่ Ice Queen (Release)")
                     summonEvent:FireServer(unpack(memoriaArgs))
                     task.wait(1)
                 else
-                    print("❄️ Summon Winter26 x10")
+                    print("❌ ไม่มี Config Memoria")
+                end
+            else
+                print("❌ ไม่มีทั้งคู่")
+
+                if Config.BuyMemoria then
+                    print("❎ มี Config Memoria")
+                    summonEvent:FireServer(unpack(memoriaArgs))
+                    task.wait(1)
+                else
+                    print("❎ ไม่มี Config Memoria")
                     summonEvent:FireServer(unpack(summonArgs))
                     task.wait(1)
                 end
-            else
-                print("🎮 Presents26 ไม่พอ → เข้า Winter ฟาร์ม")
-                task.wait(60)
-                GoWinter()
             end
+        else
+            print("❌ ไม่มี Presents ไปฟาร์ม")
+            task.wait(60)
+            GoWinter()
         end
     end)
 
@@ -247,5 +264,5 @@ while true do
         warn("❌ Error ใน loop:", err)
     end
 
-    task.wait(0.2)
+    task.wait(DelayCheck)
 end
