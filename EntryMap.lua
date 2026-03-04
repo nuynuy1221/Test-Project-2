@@ -11,18 +11,26 @@ end
 if getgenv().Config == nil then
     getgenv().Config = {
         BuyMemoria = false
-
+        LockLV = nil
     }
 end
 
 local Config = getgenv().Config
 if type(Config) ~= "table" then
-    Config = { BuyMemoria = false }
+    Config = {
+        BuyMemoria = false,
+        LockLV = nil
+    }
     getgenv().Config = Config
 end
 
 -- บังคับให้เปิดได้เฉพาะ true เท่านั้น
 Config.BuyMemoria = (Config.BuyMemoria == true)
+
+-- LockLV ต้องเป็นตัวเลขเท่านั้น
+if type(Config.LockLV) ~= "number" then
+    Config.LockLV = nil
+end
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
@@ -224,9 +232,18 @@ while true do
         -- ทำแต่ Winter เท่านั้น
 
         if hasUnit and hasMemoria then
-            print("✅ มีของครบ อยู่เฉยๆ")
-            DelayCheck = 600
+            if not Config.LockLV then
+                print("✅ มีของครบอยู่แล้ว (ไม่ล็อคเลเวล)")
+                DelayCheck = 600
 
+            elseif level >= Config.LockLV then
+                print("🔒 ถึงเลเวลที่ล็อคแล้ว อยู่เฉยๆ")
+                DelayCheck = 600
+            else
+                print("📈 เวลไม่ถึง ล็อคไว้ ต้องไปฟาร์ม")
+                task.wait(60)
+                GoWinter()
+            end
         elseif presents >= 1500 then
             if hasMemoria and not hasUnit then
                 print("⁉️ มีแค่ Memoria")
