@@ -10,7 +10,7 @@ end
 -- RESET CONFIG ถ้าไม่ได้ตั้งเอง
 if getgenv().Config == nil then
     getgenv().Config = {
-        BuyMemoria = false
+        BuyMemoria = false,
         LockLV = nil
     }
 end
