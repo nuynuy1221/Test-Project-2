@@ -1,3 +1,12 @@
+repeat task.wait() until game:IsLoaded()
+task.wait(1)
+
+local targetPlace = 16277809958
+if game.PlaceId ~= targetPlace then
+    warn("PlaceId ไม่ตรง — ไม่ฟาร์มให้")
+    return
+end
+
 -- SERVICES
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
