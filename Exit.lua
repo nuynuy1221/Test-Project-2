@@ -10,6 +10,25 @@ if game.PlaceId ~= TARGET_PLACE then
     return
 end
 
+if getgenv().Config == nil then
+    getgenv().Config = {
+        LockLV = nil
+    }
+end
+
+local Config = getgenv().Config
+if type(Config) ~= "table" then
+    Config = {
+        LockLV = nil
+    }
+    getgenv().Config = Config
+end
+
+-- LockLV ต้องเป็นตัวเลขเท่านั้น
+if type(Config.LockLV) ~= "number" then
+    Config.LockLV = nil
+end
+
 -- =========================
 -- Services
 -- =========================
@@ -41,20 +60,35 @@ task.spawn(function()
         task.wait(CHECK_DELAY)
 
         local presents = player:GetAttribute("Presents26") or 0
+        local lv = player:GetAttribute("Level") or 0
 
         print("🎁 Presents26:", presents, "/", TARGET_PRESENTS)
+        print("💠 level:", lv)
 
-        if presents >= TARGET_PRESENTS and not alreadyExit then
-            alreadyExit = true
-            warn("✅ Presents26 ครบ (" .. presents .. ") → ออก Lobby ใน " .. EXIT_DELAY .. " วินาที")
+        if not Config.LockLV then
+            if presents >= TARGET_PRESENTS and not alreadyExit then
+                alreadyExit = true
+                warn("✅ Presents26 ครบ (" .. presents .. ") → ออก Lobby ใน " .. EXIT_DELAY .. " วินาที")
 
-            task.delay(EXIT_DELAY, function()
-                pcall(function()
-                    TeleportEvent:FireServer("Lobby")
+                task.delay(EXIT_DELAY, function()
+                    pcall(function()
+                        TeleportEvent:FireServer("Lobby")
+                    end)
                 end)
-            end)
+            end
+        elseif lv >= Config.LockLV then
+            if presents >= TARGET_PRESENTS and not alreadyExit then
+                alreadyExit = true
+                warn("✅ Presents26 ครบ (" .. presents .. ") → ออก Lobby ใน " .. EXIT_DELAY .. " วินาที")
 
-            break
+                task.delay(EXIT_DELAY, function()
+                    pcall(function()
+                        TeleportEvent:FireServer("Lobby")
+                    end)
+                end)
+            end
+        else
+            print("❌ เวลยังไม่ถึง Config ฟาร์มต่อ")
         end
     end
 end)
