@@ -233,27 +233,41 @@ while true do
 
         if hasUnit and hasMemoria then
             if not Config.LockLV then
-                print("✅ มีของครบอยู่แล้ว (ไม่ล็อคเลเวล)")
-                DelayCheck = 600
-
+                if presents >= 1500 then
+                    summonEvent:FireServer(unpack(summonArgs))
+                    task.wait(0.1)
+                else
+                    print("✅ มีของครบอยู่แล้ว (ไม่ล็อคเลเวล)")
+                    DelayCheck = 600
+                end
             elseif level >= Config.LockLV then
-                print("🔒 ถึงเลเวลที่ล็อคแล้ว อยู่เฉยๆ")
-                DelayCheck = 600
+                if presents >= 1500 then
+                    summonEvent:FireServer(unpack(summonArgs))
+                    task.wait(0.1)
+                else
+                    print("🔒 ถึงเลเวลที่ล็อคแล้ว อยู่เฉยๆ")
+                    DelayCheck = 600
+                end
             else
-                print("📈 เวลไม่ถึง ล็อคไว้ ต้องไปฟาร์ม")
-                task.wait(60)
-                GoWinter()
+                if presents >= 1500 then
+                    summonEvent:FireServer(unpack(summonArgs))
+                    task.wait(0.1)
+                else
+                    print("📈 เวลไม่ถึง ล็อคไว้ ต้องไปฟาร์ม")
+                    task.wait(60)
+                    GoWinter()
+                end
             end
         elseif presents >= 1500 then
             if hasMemoria and not hasUnit then
                 print("⁉️ มีแค่ Memoria")
                 summonEvent:FireServer(unpack(summonArgs))
-                task.wait(1)
+                task.wait(0.1)
             elseif not hasMemoria and hasUnit then
                 if Config.BuyMemoria then
                     print("⁉️ มีแค่ Ice Queen (Release)")
                     summonEvent:FireServer(unpack(memoriaArgs))
-                    task.wait(1)
+                    task.wait(0.1)
                 else
                     print("❌ ไม่มี Config Memoria")
                 end
