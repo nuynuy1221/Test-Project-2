@@ -20,7 +20,7 @@ local playerGui = player.PlayerGui
 -- =========================
 -- CONFIG
 -- =========================
-local MAX_UNIT = 250
+local MAX_UNIT = 300
 local CHECK_DELAY = 3 -- เช็คทุกกี่วิ (กัน spam)
 
 -- =========================
