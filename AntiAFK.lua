@@ -6,7 +6,7 @@ task.spawn(function()
 
         local GuiService = game:GetService("GuiService")
         local VirtualInputManager = game:GetService("VirtualInputManager")
-        local button = game:GetService("CoreGui").TopBarApp.TopBarApp.UnibarLeftFrame.UnibarMenu["2"]["3"].chat.IconHitArea_chat
+        local button = game:GetService("CoreGui").TopBarApp.TopBarApp.UnibarLeftFrame.UnibarMenu["2"]["3"].nine_dot.IconHitArea_nine_dot
     
         button.Selectable = true
         GuiService.SelectedCoreObject = button
@@ -21,7 +21,7 @@ task.spawn(function()
         
         local GuiService = game:GetService("GuiService")
          local VirtualInputManager = game:GetService("VirtualInputManager")
-        local button = game:GetService("CoreGui").TopBarApp.TopBarApp.UnibarLeftFrame.UnibarMenu["2"]["3"].chat.IconHitArea_chat
+        local button = game:GetService("CoreGui").TopBarApp.TopBarApp.UnibarLeftFrame.UnibarMenu["2"]["3"].nine_dot.IconHitArea_nine_dot
         
         button.Selectable = true
         GuiService.SelectedCoreObject = button
