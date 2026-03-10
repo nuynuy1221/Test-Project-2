@@ -20,8 +20,8 @@ local playerGui = player.PlayerGui
 -- =========================
 -- CONFIG
 -- =========================
-local MAX_UNIT = 300
-local CHECK_DELAY = 3 -- เช็คทุกกี่วิ (กัน spam)
+local MAX_UNIT = 450
+local CHECK_DELAY = 5 -- เช็คทุกกี่วิ (กัน spam)
 
 -- =========================
 -- Get Max Unit From Text (x/y)
