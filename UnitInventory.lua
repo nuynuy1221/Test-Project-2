@@ -79,7 +79,7 @@ task.spawn(function()
             if maxUnit < MAX_UNIT then
                 purchaseUnitExpansion()
             else
-                print("[UnitExpansion] Max Unit reached (250)")
+                print("[UnitExpansion] Max Unit reached (300)")
             end
         end
     end
