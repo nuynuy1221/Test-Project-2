@@ -4,20 +4,22 @@ task.wait(1)
 local targetPlace = 16277809958
 if game.PlaceId ~= targetPlace then
 	local lobby = workspace:FindFirstChild("MainLobby")
-    if not lobby then
-        warn("[MainLobby] not found")
-        return
-    end
+	if not lobby then
+		warn("[MainLobby] not found")
+		return
+	end
 
-    for _, obj in ipairs(lobby:GetChildren()) do
-        pcall(function()
-            obj:Destroy()
-        end)
-    end
+	for _, obj in ipairs(lobby:GetChildren()) do
+		if obj.Name ~= "ChallengeBanner" then
+			pcall(function()
+				obj:Destroy()
+			end)
+		end
+	end
 
-    print("[MainLobby] Cleared all")
-        return
-    end
+	print("[MainLobby] Cleared all except ChallengeBanner")
+	return
+end
 
 local map2 = workspace:WaitForChild("Map")
 
