@@ -34,3 +34,104 @@ local skellingtons = map2:FindFirstChild("Skellingtons")
 if skellingtons then
 	skellingtons:Destroy()
 end
+
+task.wait(1)
+local DEL_TEXTURE=true
+local DEL_BACKGROUND=true
+local DEL_OBJECTS=true
+local MUTE_SOUNDS=true
+local LOCK_FPS=false
+local FPS_VALUE=10
+local Lighting=game:GetService("Lighting")
+local SoundService=game:GetService("SoundService")
+local function S(o,p,v) pcall(function() o[p]=v end) end
+
+if DEL_TEXTURE then
+    local function applyTexture(obj)
+        if obj:IsA("Decal") or obj:IsA("Texture") then
+            S(obj,"Transparency",1) S(obj,"Texture","")
+        end
+        if obj:IsA("SpecialMesh") then S(obj,"TextureId","") end
+        if obj:IsA("BasePart") then S(obj,"Material",Enum.Material.SmoothPlastic) end
+    end
+    local function applyAllTextures()
+        for _,obj in ipairs(workspace:GetDescendants()) do applyTexture(obj) end
+        pcall(function() Lighting.Technology=Enum.Technology.Compatibility end)
+    end
+    applyAllTextures()
+    workspace.DescendantAdded:Connect(function(obj) task.wait() applyTexture(obj) end)
+    task.spawn(function() while task.wait(5) do applyAllTextures() end end)
+end
+
+if DEL_BACKGROUND then
+    local function applyBackground()
+        S(Lighting,"FogColor",Color3.new(1,1,1))
+        S(Lighting,"FogEnd",0.001)
+        S(Lighting,"FogStart",0)
+        S(Lighting,"Brightness",0)
+        S(Lighting,"Ambient",Color3.new(0,0,0))
+        for _,obj in ipairs(Lighting:GetChildren()) do
+            if obj.ClassName=="Sky" then pcall(function() obj:Destroy() end)
+            elseif obj.ClassName=="Atmosphere" then S(obj,"Density",0) S(obj,"Haze",0) S(obj,"Glare",0) end
+        end
+    end
+    applyBackground()
+    Lighting.ChildAdded:Connect(function(obj)
+        task.wait()
+        if obj.ClassName=="Sky" then pcall(function() obj:Destroy() end)
+        elseif obj.ClassName=="Atmosphere" then S(obj,"Density",0) S(obj,"Haze",0) S(obj,"Glare",0) end
+    end)
+    task.spawn(function() while task.wait(5) do applyBackground() end end)
+end
+
+if DEL_OBJECTS then
+    local KILL={ParticleEmitter=1,Beam=1,Trail=1,PointLight=1,SpotLight=1,SurfaceLight=1,SelectionBox=1,SelectionSphere=1,BillboardGui=1,SurfaceGui=1}
+    local function killObj(obj)
+        if KILL[obj.ClassName] then
+            S(obj,"Enabled",false) S(obj,"Visible",false) S(obj,"Rate",0)
+        end
+    end
+    local function applyAllObjects()
+        for _,obj in ipairs(workspace:GetDescendants()) do killObj(obj) end
+        local t=workspace:FindFirstChildOfClass("Terrain")
+        if t then
+            S(t,"Decoration",false) S(t,"WaterWaveSize",0)
+            S(t,"WaterReflectance",0) S(t,"CastShadow",false)
+        end
+    end
+    applyAllObjects()
+    workspace.DescendantAdded:Connect(function(obj) task.wait() killObj(obj) end)
+    task.spawn(function() while task.wait(5) do applyAllObjects() end end)
+end
+
+if MUTE_SOUNDS then
+    local function muteObj(obj)
+        if obj:IsA("Sound") then
+            pcall(function()
+                obj:Stop()
+                obj.Volume=0
+                obj.PlaybackSpeed=0
+            end)
+        end
+    end
+    local function applyAllMute()
+        for _,obj in ipairs(workspace:GetDescendants()) do muteObj(obj) end
+        for _,obj in ipairs(SoundService:GetDescendants()) do muteObj(obj) end
+        pcall(function() SoundService.AmbientReverb=Enum.ReverbType.NoReverb end)
+    end
+    applyAllMute()
+    workspace.DescendantAdded:Connect(function(obj) task.wait() muteObj(obj) end)
+    SoundService.DescendantAdded:Connect(function(obj) task.wait() muteObj(obj) end)
+    task.spawn(function() while task.wait(3) do applyAllMute() end end)
+end
+
+if LOCK_FPS and FPS_VALUE>0 then
+    pcall(function() setfpscap(FPS_VALUE) end)
+    pcall(function() syn.setfpscap(FPS_VALUE) end)
+    task.spawn(function()
+        while task.wait(5) do
+            pcall(function() setfpscap(FPS_VALUE) end)
+            pcall(function() syn.setfpscap(FPS_VALUE) end)
+        end
+    end)
+end
