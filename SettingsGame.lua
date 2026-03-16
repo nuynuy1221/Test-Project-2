@@ -47,6 +47,7 @@ task.spawn(function()
 
 	local settingsList = {
 		{ Name = "AutoSkipWaves", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Gameplay.AutoSkipWaves.Slider.UIStroke.UIGradient },
+		{ Name = "SummonMaxAffordable", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Graphics.DisableCameraShake.Slider.UIStroke.UIGradient },
 		{ Name = "DisableCameraShake", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Graphics.DisableCameraShake.Slider.UIStroke.UIGradient },
 		{ Name = "DisableDepthOfField", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Graphics.DisableDepthOfField.Slider.UIStroke.UIGradient },
 		{ Name = "HideFamiliars", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Graphics.HideFamiliars.Slider.UIStroke.UIGradient },
