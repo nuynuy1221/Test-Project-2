@@ -93,12 +93,14 @@ task.spawn(function()
 
             -- ซื้อ Unit Slot
             if maxSlot < MAX_UNIT then
+                purchaseMemoriaExpansion()
                 purchaseUnitExpansion()
             end
 
             -- ซื้อ Memoria Slot
             if maxSlot < MAX_MEMORIA then
                 purchaseMemoriaExpansion()
+                purchaseUnitExpansion()
             end
         end
     end
