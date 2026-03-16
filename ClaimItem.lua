@@ -22,18 +22,23 @@ end
 --=============================================--
 
 --================ SERVICES =================--
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Networking = ReplicatedStorage:WaitForChild("Networking")
-local CodesEvent = Networking:WaitForChild("CodesEvent", 5)          -- สำหรับรีดีมโค้ด
+
+local CodesEvent = Networking:WaitForChild("CodesEvent", 5)
 local DailyRewardEvent = Networking:WaitForChild("DailyRewardEvent")
 local MilestonesEvent = Networking:WaitForChild("Milestones"):WaitForChild("MilestonesEvent")
 local QuestEvent = Networking:WaitForChild("Quests"):WaitForChild("ClaimQuest")
 local BattlepassEvent = Networking:WaitForChild("BattlepassEvent")
 local ReturningPlayerEvent = Networking:WaitForChild("ReturningPlayerEvent")
 local NewPlayerRewardsEvent = Networking:WaitForChild("NewPlayerRewardsEvent")
-local APiratesWelcomeEvent = Networking:WaitForChild("APiratesWelcomeEvent", 5)  -- เพิ่มสำหรับ A Pirates Welcome
+local APiratesWelcomeEvent = Networking:WaitForChild("APiratesWelcomeEvent", 5)
 --============================================--
 
+local player = Players.LocalPlayer
 local DELAY = 0.2
 
 local function safeFire(remote, args)
@@ -65,7 +70,7 @@ task.spawn(function()
     for _, code in ipairs(codes) do
         pcall(function()
             CodesEvent:FireServer(code)
-            warn("รีดีมโค้ด: " .. code .. " → ส่งเรียบร้อย")
+            warn("รีดีมโค้ด: " .. code)
         end)
         task.wait(1.2)
     end
@@ -75,13 +80,8 @@ end)
 
 --================ DAILY REWARD (NORMAL) ===================
 for _, reward in ipairs({
-    {"Special", 1},
-    {"Special", 2},
-    {"Special", 3},
-    {"Special", 4},
-    {"Special", 5},
-    {"Special", 6},
-    {"Special", 7},
+    {"Special",1},{"Special",2},{"Special",3},
+    {"Special",4},{"Special",5},{"Special",6},{"Special",7}
 }) do
     safeFire(DailyRewardEvent, {"Claim", reward})
 end
@@ -92,7 +92,7 @@ for day = 1, 28 do
 end
 
 --================ MILESTONES ===================
-for _, milestone in ipairs({5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75}) do
+for _, milestone in ipairs({5,10,15,20,25,30,35,40,45,50,55,60,65,70,75}) do
     safeFire(MilestonesEvent, {"Claim", milestone})
 end
 
@@ -112,13 +112,24 @@ for day = 1, 7 do
     safeFire(NewPlayerRewardsEvent, {"Claim", day})
 end
 
---================ A PIRATES WELCOME (รับตั้งแต่ 1-7) ===================
+--================ A PIRATES WELCOME ===================
 if APiratesWelcomeEvent then
     for day = 1, 7 do
         safeFire(APiratesWelcomeEvent, {"Claim", day})
     end
-else
-    warn("⚠️ ไม่เจอ APiratesWelcomeEvent — ข้ามการรับรางวัลนี้")
 end
 
 print("✅ ClaimItem: รับของทั้งหมดเสร็จเรียบร้อย")
+
+--================ CHECK DAILY UI THEN REJOIN ===================
+task.wait(3)
+
+local dailyUI = player:FindFirstChild("PlayerGui")
+    and player.PlayerGui:FindFirstChild("DailyRewards")
+
+if dailyUI then
+    warn("🔁 พบ DailyRewards → กำลัง Rejoin")
+    TeleportService:Teleport(game.PlaceId, player)
+else
+    print("✅ ไม่พบ DailyRewards → ไม่ต้องรีจอย")
+end
