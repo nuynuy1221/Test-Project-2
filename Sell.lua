@@ -288,3 +288,37 @@ task.spawn(function()
     end
 
 end)
+
+--------------------------------------------------
+-- Auto Cancal Alert Popup
+--------------------------------------------------
+task.spawn(function()
+
+    local GuiService = game:GetService("GuiService")
+    local VIM = game:GetService("VirtualInputManager")
+    local player = game:GetService("Players").LocalPlayer
+
+    while true do
+        task.wait(0.3)
+
+        local ok, button = pcall(function()
+            return player.PlayerGui.PopupScreen.BaseCancelFrame.Main.Buttons.Cancel.Button
+        end)
+
+        if ok and button and button.Visible then
+            print("พบ Cancel → กดด้วย Enter")
+
+            button.Selectable = true
+            GuiService.SelectedObject = button
+
+            VIM:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+            VIM:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+
+            task.wait(0.1)
+            GuiService.SelectedObject = nil
+
+            task.wait(1)
+        end
+    end
+
+end)
