@@ -3,11 +3,9 @@ task.wait(2)
 
 local targetPlace = 16146832113
 if game.PlaceId ~= targetPlace then
-    warn("PlaceId ไม่ตรง ไม้อัพเกรดกระเป๋าให้")
+    warn("PlaceId ไม่ตรง ไม่อัพเกรดกระเป๋า")
     return
 end
-
-repeat task.wait() until game:IsLoaded()
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -21,12 +19,13 @@ local playerGui = player.PlayerGui
 -- CONFIG
 -- =========================
 local MAX_UNIT = 450
-local CHECK_DELAY = 5 -- เช็คทุกกี่วิ (กัน spam)
+local MAX_MEMORIA = 450
+local CHECK_DELAY = 5
 
 -- =========================
--- Get Max Unit From Text (x/y)
+-- GET MAX SLOT FROM TEXT x/y
 -- =========================
-local function getMaxUnit()
+local function getMaxSlot()
     local ok, label = pcall(function()
         return playerGui.Windows.GlobalInventory.Holder
             .LeftContainer.BottomBar.OwnedItems.ItemAmount
@@ -41,7 +40,6 @@ local function getMaxUnit()
         return nil
     end
 
-    -- ดึงเลขหลัง /
     local current, max = text:match("(%d+)%s*/%s*(%d+)")
     if max then
         return tonumber(max)
@@ -51,7 +49,7 @@ local function getMaxUnit()
 end
 
 -- =========================
--- Purchase Unit Expansion
+-- PURCHASE UNIT EXPANSION
 -- =========================
 local function purchaseUnitExpansion()
     local args = {
@@ -66,20 +64,41 @@ local function purchaseUnitExpansion()
 end
 
 -- =========================
--- Main Loop
+-- PURCHASE MEMORIA EXPANSION
+-- =========================
+local function purchaseMemoriaExpansion()
+    local args = {
+        [1] = "Purchase"
+    }
+
+    ReplicatedStorage:WaitForChild("Networking")
+        :WaitForChild("Memorias")
+        :WaitForChild("MemoriaExpansionEvent")
+        :FireServer(unpack(args))
+
+    print("[MemoriaExpansion] Purchase fired")
+end
+
+-- =========================
+-- MAIN LOOP
 -- =========================
 task.spawn(function()
     while true do
         task.wait(CHECK_DELAY)
 
-        local maxUnit = getMaxUnit()
-        if maxUnit then
-            print("[UnitExpansion] Current Max =", maxUnit)
+        local maxSlot = getMaxSlot()
 
-            if maxUnit < MAX_UNIT then
+        if maxSlot then
+            print("[Inventory] Current Max =", maxSlot)
+
+            -- ซื้อ Unit Slot
+            if maxSlot < MAX_UNIT then
                 purchaseUnitExpansion()
-            else
-                print("[UnitExpansion] Max Unit reached (300)")
+            end
+
+            -- ซื้อ Memoria Slot
+            if maxSlot < MAX_MEMORIA then
+                purchaseMemoriaExpansion()
             end
         end
     end
