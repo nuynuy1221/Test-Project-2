@@ -91,6 +91,11 @@ for day = 1, 28 do
     safeFire(DailyRewardEvent, {"Claim", {"Anniversary", day}})
 end
 
+--================ DAILY REWARD (WINTER) ===================
+for day = 1, 28 do
+    safeFire(DailyRewardEvent, {"Claim", {"Winter", day}})
+end
+
 --================ MILESTONES ===================
 for _, milestone in ipairs({5,10,15,20,25,30,35,40,45,50,55,60,65,70,75}) do
     safeFire(MilestonesEvent, {"Claim", milestone})
