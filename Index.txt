@@ -2,6 +2,7 @@ DeleteMap.lua
 UI.lua
 SkipTutorial.lua
 ReturnAFK.lua
+SettingsGame.lua
 ClaimItem.lua
 EquipUnits.lua
 BuyItem.lua
@@ -12,4 +13,3 @@ Farm.lua
 SkipAndRetry.lua
 Exit.lua
 AntiAFK.lua
-SettingsGame.lua
