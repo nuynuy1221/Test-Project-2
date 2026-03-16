@@ -18,8 +18,8 @@ local playerGui = player.PlayerGui
 -- =========================
 -- CONFIG
 -- =========================
-local MAX_UNIT = 450
-local MAX_MEMORIA = 450
+local MAX_UNIT = 500
+local MAX_MEMORIA = 500
 local CHECK_DELAY = 5
 
 -- =========================
