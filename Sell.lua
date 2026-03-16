@@ -256,12 +256,9 @@ task.spawn(function()
 
     while true do
 
-        openInventory()
         -----------------------
         -- MEMORIA
         -----------------------
-
-        openMemoriaTab()
 
         local items = getItems()
 
@@ -275,7 +272,6 @@ task.spawn(function()
         -- UNITS
         -----------------------
 
-        openUnitsTab()
 
         items = getItems()
 
