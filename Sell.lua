@@ -9,6 +9,8 @@ end
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local GuiService = game:GetService("GuiService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local player = Players.LocalPlayer
 repeat task.wait() until player:FindFirstChild("PlayerGui")
@@ -18,15 +20,87 @@ local playerGui = player.PlayerGui
 local Networking = ReplicatedStorage:WaitForChild("Networking")
 
 local MemoriaEvent = Networking
-    :WaitForChild("Memorias")
-    :WaitForChild("MemoriaEvent")
+:WaitForChild("Memorias")
+:WaitForChild("MemoriaEvent")
 
 local SellEvent = Networking
-    :WaitForChild("Units")
-    :WaitForChild("SellEvent")
+:WaitForChild("Units")
+:WaitForChild("SellEvent")
 
 --------------------------------------------------
--- SELL MYTHIC NON SHINY
+-- BUTTON PRESS
+--------------------------------------------------
+
+local function pressButton(button)
+
+    button.Selectable = true
+    GuiService.SelectedCoreObject = button
+
+    VirtualInputManager:SendKeyEvent(true,Enum.KeyCode.Return,false,game)
+    VirtualInputManager:SendKeyEvent(false,Enum.KeyCode.Return,false,game)
+
+    task.wait(0.1)
+
+    GuiService.SelectedCoreObject = nil
+
+end
+
+--------------------------------------------------
+-- OPEN INVENTORY (ครั้งเดียว)
+--------------------------------------------------
+
+local function openInventory()
+
+    local button = playerGui.HUD.SideButtons.Buttons.Units.Button
+    pressButton(button)
+
+    task.wait(0.5)
+
+end
+
+--------------------------------------------------
+-- OPEN TABS
+--------------------------------------------------
+
+local function openUnitsTab()
+
+    local button = playerGui.Windows.GlobalInventory.Header.Tabs.Units.Button
+    pressButton(button)
+
+    task.wait(0.3)
+
+end
+
+local function openMemoriaTab()
+
+    local button = playerGui.Windows.GlobalInventory.Header.Tabs.Memorias.Button
+    pressButton(button)
+
+    task.wait(0.3)
+
+end
+
+--------------------------------------------------
+-- GET ITEMS
+--------------------------------------------------
+
+local function getItems()
+
+    local success, items = pcall(function()
+        return playerGui.Windows
+        .GlobalInventory.Holder
+        .LeftContainer.FakeScrollingFrame
+        .Items
+    end)
+
+    if success then
+        return items
+    end
+
+end
+
+--------------------------------------------------
+-- SELL NON SHINY MYTHIC
 --------------------------------------------------
 
 local function sellNonShinyMythic(items)
@@ -40,12 +114,10 @@ local function sellNonShinyMythic(items)
 
                 local guid = guidFrame.Name
                 local container = guidFrame:FindFirstChild("Container")
-
                 if not container then continue end
 
                 local holder = container:FindFirstChild("Holder")
                 local main = holder and holder:FindFirstChild("Main")
-
                 if not main then continue end
 
                 local isMythic = main:FindFirstChild("Mythic")
@@ -64,12 +136,8 @@ local function sellNonShinyMythic(items)
 
     if #unitsToSell > 0 then
 
-        local args = {
-            [1] = unitsToSell
-        }
-
         pcall(function()
-            SellEvent:FireServer(unpack(args))
+            SellEvent:FireServer(unitsToSell)
         end)
 
     end
@@ -96,7 +164,6 @@ local function sellMemoria(items)
 
                 local holder = container:FindFirstChild("Holder")
                 local main = holder and holder:FindFirstChild("Main")
-
                 if not main then continue end
 
                 if main:FindFirstChild("Rare")
@@ -114,12 +181,20 @@ local function sellMemoria(items)
     end
 
     if #memoriaToSell > 0 then
+
         pcall(function()
             MemoriaEvent:FireServer("Sell", memoriaToSell)
         end)
+
     end
 
 end
+
+--------------------------------------------------
+-- START
+--------------------------------------------------
+
+openInventory() -- เปิดกระเป๋าครั้งเดียว
 
 --------------------------------------------------
 -- MAIN LOOP
@@ -129,19 +204,30 @@ task.spawn(function()
 
     while true do
 
-        local success, items = pcall(function()
-            return playerGui.Windows
-                .GlobalInventory.Holder
-                .LeftContainer.FakeScrollingFrame
-                .Items
-        end)
+        -----------------------
+        -- MEMORIA
+        -----------------------
 
-        if success and items then
+        openMemoriaTab()
 
+        local items = getItems()
+
+        if items then
             sellMemoria(items)
+        end
 
+        task.wait(2)
+
+        -----------------------
+        -- UNITS
+        -----------------------
+
+        openUnitsTab()
+
+        items = getItems()
+
+        if items then
             sellNonShinyMythic(items)
-
         end
 
         task.wait(2)
