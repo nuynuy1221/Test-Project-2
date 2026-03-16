@@ -75,16 +75,19 @@ end)
 
 --================ DAILY REWARD (NORMAL) ===================
 for _, reward in ipairs({
+    {"Special", 1},
     {"Special", 2},
+    {"Special", 3},
     {"Special", 4},
+    {"Special", 5},
+    {"Special", 6},
     {"Special", 7},
-    {"Winter", 7},
 }) do
     safeFire(DailyRewardEvent, {"Claim", reward})
 end
 
 --================ DAILY REWARD (ANNIVERSARY) ===================
-for day = 1, 7 do
+for day = 1, 28 do
     safeFire(DailyRewardEvent, {"Claim", {"Anniversary", day}})
 end
 
