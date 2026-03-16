@@ -1,71 +1,295 @@
+repeat task.wait() until game:IsLoaded()
+task.wait(2)
+
+local targetPlace = 16146832113
+if game.PlaceId ~= targetPlace then
+    warn("PlaceId ไม่ตรง ไม่รันสคริปต์")
+    return
+end
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local GuiService = game:GetService("GuiService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local player = Players.LocalPlayer
+repeat task.wait() until player:FindFirstChild("PlayerGui")
+
+local playerGui = player.PlayerGui
+
+local Networking = ReplicatedStorage:WaitForChild("Networking")
+
+local MemoriaEvent = Networking
+:WaitForChild("Memorias")
+:WaitForChild("MemoriaEvent")
+
+local SellEvent = Networking
+:WaitForChild("Units")
+:WaitForChild("SellEvent")
+
+--------------------------------------------------
+-- UPDATE LOG
+--------------------------------------------------
+
+pcall(function()
+
+    local Update = {
+        [1] = "Update",
+        [2] = true
+    }
+
+    Networking
+    :WaitForChild("UpdateLogEvent")
+    :FireServer(unpack(Update))
+
+end)
+
+--------------------------------------------------
+-- AUTO CLOSE ALL POPUPS
+--------------------------------------------------
+
+local function pressButton(button)
+
+    local pos = button.AbsolutePosition
+    local size = button.AbsoluteSize
+
+    local x = pos.X + size.X/2
+    local y = pos.Y + size.Y/2
+
+    VirtualInputManager:SendMouseButtonEvent(x,y,0,true,game,1)
+    VirtualInputManager:SendMouseButtonEvent(x,y,0,false,game,1)
+
+end
+
 task.spawn(function()
-	local Players = game:GetService("Players")
-	local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-	local player = Players.LocalPlayer
-	local SettingsEvent = ReplicatedStorage
-		:WaitForChild("Networking")
-		:WaitForChild("Settings")
-		:WaitForChild("SettingsEvent")
+    for i = 1,30 do
 
-	local function isOff(uiGradient)
-		if not uiGradient or not uiGradient:IsA("UIGradient") then
-			return false
-		end
+        for _, gui in pairs(playerGui:GetChildren()) do
 
-		local keypoints = uiGradient.Color.Keypoints
-		if #keypoints == 0 then
-			return false
-		end
+            local holder = gui:FindFirstChild("Holder")
+            local close = holder and holder:FindFirstChild("Close")
+            local button = close and close:FindFirstChild("Button")
 
-		local r, g, b = 0, 0, 0
-		for i, kp in ipairs(keypoints) do
-			r += kp.Value.R
-			g += kp.Value.G
-			b += kp.Value.B
-		end
+            if button then
+                pcall(function()
+                    pressButton(button)
+                end)
+            end
 
-		r /= #keypoints
-		g /= #keypoints
-		b /= #keypoints
+        end
 
-		print(string.format(
-			"AVG COLOR -> R: %.3f G: %.3f B: %.3f",
-			r, g, b
-		))
+        task.wait(0.5)
 
-		-- ON = เขียวเด่น
-		-- OFF = แดง/ม่วงเด่น
-		if g < r or g < b then
-			print("→ OFF DETECTED")
-			return true
-		end
+    end
 
-		print("→ ON")
-		return false
-	end
+end)
 
-	local settingsList = {
-		{ Name = "AutoSkipWaves", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Gameplay.AutoSkipWaves.Slider.UIStroke.UIGradient },
-		{ Name = "DisableCameraShake", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Graphics.DisableCameraShake.Slider.UIStroke.UIGradient },
-		{ Name = "DisableDepthOfField", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Graphics.DisableDepthOfField.Slider.UIStroke.UIGradient },
-		{ Name = "HideFamiliars", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Graphics.HideFamiliars.Slider.UIStroke.UIGradient },
-		{ Name = "LowDetailMode", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Graphics.LowDetailMode.Slider.UIStroke.UIGradient },
-		{ Name = "DisableGlobalMessages", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Miscellaneous.DisableGlobalMessages.Slider.UIStroke.UIGradient },
-		{ Name = "SkipSummonAnimation", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Miscellaneous.SkipSummonAnimation.Slider.UIStroke.UIGradient },
-		{ Name = "DisableDamageIndicators", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Units.DisableDamageIndicators.Slider.UIStroke.UIGradient },
-		{ Name = "DisableVisualEffects", Path = player.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Units.DisableVisualEffects.Slider.UIStroke.UIGradient },
-	}
+--------------------------------------------------
+-- BUTTON PRESS
+--------------------------------------------------
 
-	for _, setting in ipairs(settingsList) do
-		print("\n>>> CHECK:", setting.Name)
+local function pressButton(button)
 
-		if isOff(setting.Path) then
-			print("🔥 TOGGLE:", setting.Name)
-			SettingsEvent:FireServer("Toggle", setting.Name)
-			task.wait(0.08)
-		else
-			print("✅ ALREADY ON")
-		end
-	end
+    button.Selectable = true
+    GuiService.SelectedCoreObject = button
+
+    VirtualInputManager:SendKeyEvent(true,Enum.KeyCode.Return,false,game)
+    VirtualInputManager:SendKeyEvent(false,Enum.KeyCode.Return,false,game)
+
+    task.wait(0.1)
+
+    GuiService.SelectedCoreObject = nil
+
+end
+
+--------------------------------------------------
+-- OPEN INVENTORY
+--------------------------------------------------
+
+local function openInventory()
+
+    local button = playerGui.HUD.SideButtons.Buttons.Units.Button
+    pressButton(button)
+
+    task.wait(0.5)
+
+end
+
+--------------------------------------------------
+-- OPEN TABS
+--------------------------------------------------
+
+local function openUnitsTab()
+
+    local button = playerGui.Windows.GlobalInventory.Header.Tabs.Units.Button
+    pressButton(button)
+
+    task.wait(0.3)
+
+end
+
+local function openMemoriaTab()
+
+    local button = playerGui.Windows.GlobalInventory.Header.Tabs.Memorias.Button
+    pressButton(button)
+
+    task.wait(0.3)
+
+end
+
+--------------------------------------------------
+-- GET ITEMS
+--------------------------------------------------
+
+local function getItems()
+
+    local success, items = pcall(function()
+        return playerGui.Windows
+        .GlobalInventory.Holder
+        .LeftContainer.FakeScrollingFrame
+        .Items
+    end)
+
+    if success then
+        return items
+    end
+
+end
+
+--------------------------------------------------
+-- SELL NON SHINY MYTHIC
+--------------------------------------------------
+
+local function sellNonShinyMythic(items)
+
+    local unitsToSell = {}
+
+    for _, cache in ipairs(items:GetChildren()) do
+        if cache.Name == "CacheContainer" then
+
+            for _, guidFrame in ipairs(cache:GetChildren()) do
+
+                local guid = guidFrame.Name
+                local container = guidFrame:FindFirstChild("Container")
+                if not container then continue end
+
+                local holder = container:FindFirstChild("Holder")
+                local main = holder and holder:FindFirstChild("Main")
+                if not main then continue end
+
+                local isMythic = main:FindFirstChild("Mythic")
+
+                local shinyFrame = container:FindFirstChild("ShinyFrame")
+                local isShiny = shinyFrame and shinyFrame.Visible
+
+                if isMythic and not isShiny then
+                    table.insert(unitsToSell, guid)
+                end
+
+            end
+
+        end
+    end
+
+    if #unitsToSell > 0 then
+
+        pcall(function()
+            SellEvent:FireServer(unitsToSell)
+        end)
+
+    end
+
+end
+
+--------------------------------------------------
+-- SELL MEMORIA
+--------------------------------------------------
+
+local function sellMemoria(items)
+
+    local memoriaToSell = {}
+
+    for _, cache in ipairs(items:GetChildren()) do
+        if cache.Name == "CacheContainer" then
+
+            for _, guidFrame in ipairs(cache:GetChildren()) do
+
+                local guid = guidFrame.Name
+
+                local container = guidFrame:FindFirstChild("Container")
+                if not container then continue end
+
+                local holder = container:FindFirstChild("Holder")
+                local main = holder and holder:FindFirstChild("Main")
+                if not main then continue end
+
+                if main:FindFirstChild("Rare")
+                or main:FindFirstChild("Epic")
+                or main:FindFirstChild("Legendary")
+                or main:FindFirstChild("Mythic") then
+
+                    table.insert(memoriaToSell, guid)
+
+                end
+
+            end
+
+        end
+    end
+
+    if #memoriaToSell > 0 then
+
+        pcall(function()
+            MemoriaEvent:FireServer("Sell", memoriaToSell)
+        end)
+
+    end
+
+end
+
+--------------------------------------------------
+-- START
+--------------------------------------------------
+
+openInventory() -- เปิดกระเป๋าครั้งเดียว
+
+--------------------------------------------------
+-- MAIN LOOP
+--------------------------------------------------
+
+task.spawn(function()
+
+    while true do
+
+        -----------------------
+        -- MEMORIA
+        -----------------------
+
+        openMemoriaTab()
+
+        local items = getItems()
+
+        if items then
+            sellMemoria(items)
+        end
+
+        task.wait(2)
+
+        -----------------------
+        -- UNITS
+        -----------------------
+
+        openUnitsTab()
+
+        items = getItems()
+
+        if items then
+            sellNonShinyMythic(items)
+        end
+
+        task.wait(2)
+
+    end
+
 end)
