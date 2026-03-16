@@ -269,7 +269,7 @@ task.spawn(function()
             sellMemoria(items)
         end
 
-        task.wait(2)
+        task.wait(0.1)
 
         -----------------------
         -- UNITS
@@ -283,7 +283,7 @@ task.spawn(function()
             sellNonShinyMythic(items)
         end
 
-        task.wait(2)
+        task.wait(0.1)
 
     end
 
