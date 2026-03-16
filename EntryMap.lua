@@ -203,9 +203,11 @@ local summonEvent = rep:WaitForChild("Networking")
     :WaitForChild("SummonEvent")
 
 local summonArgs = {"SummonMany", "Winter26", 10}
+local summonArgs50 = {"SummonMany", "Winter26", 50}
 
 -- 🔹 Summon Memoria
 local memoriaArgs = {"SummonMany", "WinterMemoria", 10}
+local memoriaArgs50 = {"SummonMany", "WinterMemoria", 50}
 
 
 -- =========================
@@ -234,24 +236,33 @@ task.spawn(function()
 
             if hasUnit and hasMemoria then
                 if not Config.LockLV then
-                    if presents >= 1500 then
+                    if presents >= 1500 and presents < 7500 then
                         summonEvent:FireServer(unpack(summonArgs))
                         task.wait(0.1)
-                    else
+                    elseif presents >= 7500 then
+                        summonEvent:FireServer(unpack(summonArgs50))
+                        task.wait(0.1)
+                    else        
                         print("✅ มีของครบอยู่แล้ว (ไม่ล็อคเลเวล)")
                         DelayCheck = 600
                     end
                 elseif level >= Config.LockLV then
-                    if presents >= 1500 then
+                    if presents >= 1500 and presents < 7500 then
                         summonEvent:FireServer(unpack(summonArgs))
+                        task.wait(0.1)
+                    elseif presents >= 7500 then
+                        summonEvent:FireServer(unpack(summonArgs50))
                         task.wait(0.1)
                     else
                         print("🔒 ถึงเลเวลที่ล็อคแล้ว อยู่เฉยๆ")
                         DelayCheck = 600
                     end
                 else
-                    if presents >= 1500 then
+                    if presents >= 1500 and presents < 7500 then
                         summonEvent:FireServer(unpack(summonArgs))
+                        task.wait(0.1)
+                    elseif presents >= 7500 then
+                        summonEvent:FireServer(unpack(summonArgs50))
                         task.wait(0.1)
                     else
                         print("📈 เวลไม่ถึง ล็อคไว้ ต้องไปฟาร์ม")
@@ -259,7 +270,7 @@ task.spawn(function()
                         GoWinter()
                     end
                 end
-            elseif presents >= 1500 then
+            elseif presents >= 1500 and presents < 7500 then
                 if hasMemoria and not hasUnit then
                     print("⁉️ มีแค่ Memoria")
                     summonEvent:FireServer(unpack(summonArgs))
@@ -282,6 +293,32 @@ task.spawn(function()
                     else
                         print("❎ ไม่มี Config Memoria")
                         summonEvent:FireServer(unpack(summonArgs))
+                        task.wait(1)
+                    end
+                end
+            elseif presents >= 7500 then
+                if hasMemoria and not hasUnit then
+                    print("⁉️ มีแค่ Memoria")
+                    summonEvent:FireServer(unpack(summonArgs50))
+                    task.wait(0.1)
+                elseif not hasMemoria and hasUnit then
+                    if Config.BuyMemoria then
+                        print("⁉️ มีแค่ Ice Queen (Release)")
+                        summonEvent:FireServer(unpack(memoriaArgs50))
+                        task.wait(0.1)
+                    else
+                        print("❌ ไม่มี Config Memoria")
+                    end
+                else
+                    print("❌ ไม่มีทั้งคู่")
+
+                    if Config.BuyMemoria then
+                        print("❎ มี Config Memoria")
+                        summonEvent:FireServer(unpack(memoriaArgs50))
+                        task.wait(1)
+                    else
+                        print("❎ ไม่มี Config Memoria")
+                        summonEvent:FireServer(unpack(summonArgs50))
                         task.wait(1)
                     end
                 end
