@@ -28,6 +28,64 @@ local SellEvent = Networking
 :WaitForChild("SellEvent")
 
 --------------------------------------------------
+-- UPDATE LOG
+--------------------------------------------------
+
+pcall(function()
+
+    local Update = {
+        [1] = "Update",
+        [2] = true
+    }
+
+    Networking
+    :WaitForChild("UpdateLogEvent")
+    :FireServer(unpack(Update))
+
+end)
+
+--------------------------------------------------
+-- AUTO CLOSE ALL POPUPS
+--------------------------------------------------
+
+local function pressButton(button)
+
+    local pos = button.AbsolutePosition
+    local size = button.AbsoluteSize
+
+    local x = pos.X + size.X/2
+    local y = pos.Y + size.Y/2
+
+    VirtualInputManager:SendMouseButtonEvent(x,y,0,true,game,1)
+    VirtualInputManager:SendMouseButtonEvent(x,y,0,false,game,1)
+
+end
+
+task.spawn(function()
+
+    for i = 1,30 do
+
+        for _, gui in pairs(playerGui:GetChildren()) do
+
+            local holder = gui:FindFirstChild("Holder")
+            local close = holder and holder:FindFirstChild("Close")
+            local button = close and close:FindFirstChild("Button")
+
+            if button then
+                pcall(function()
+                    pressButton(button)
+                end)
+            end
+
+        end
+
+        task.wait(0.5)
+
+    end
+
+end)
+
+--------------------------------------------------
 -- BUTTON PRESS
 --------------------------------------------------
 
@@ -46,7 +104,7 @@ local function pressButton(button)
 end
 
 --------------------------------------------------
--- OPEN INVENTORY (ครั้งเดียว)
+-- OPEN INVENTORY
 --------------------------------------------------
 
 local function openInventory()
