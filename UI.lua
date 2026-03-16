@@ -23,7 +23,7 @@ local function createBar(name, posScale, bgColor, emoji)
     frame.Name = name
     frame.AnchorPoint = Vector2.new(0.5,0.5)
     frame.Position = UDim2.new(0.5,0,posScale,0)
-    frame.Size = UDim2.new(0.75,0,0.11,0) -- เล็กลงจาก 0.85 / 0.15
+    frame.Size = UDim2.new(0.85,0,0.15,0)
     frame.BackgroundColor3 = bgColor
     frame.BackgroundTransparency = 0.35
     frame.BorderSizePixel = 0
