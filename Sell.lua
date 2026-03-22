@@ -263,9 +263,6 @@ task.spawn(function()
         local items = getItems()
 
         if items then
-            openInventory()
-            openUnitsTab()
-            
             sellNonShinyMythic(items)
             sellMemoria(items)
         end
@@ -280,9 +277,6 @@ task.spawn(function()
         items = getItems()
 
         if items then
-            openInventory()
-            openMemoriaTab()
-                
             sellNonShinyMythic(items)
             sellMemoria(items)
         end
