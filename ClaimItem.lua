@@ -59,10 +59,9 @@ task.spawn(function()
     end
 
     local codes = {
-        "Chainsaws",
-        "1WeekDelay",
-        "NoCustoms",
-        "BugDemonAttacked"
+        "150KYT",
+        "LATECUSTOMLEVEL",
+        "MOONLESS"
     }
 
     print("เริ่มรีดีมโค้ด...")
