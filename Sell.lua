@@ -249,12 +249,32 @@ local function sellMemoria(items)
 end
 
 --------------------------------------------------
+-- กดกลางจอ
+--------------------------------------------------
+
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local function clickCenter()
+    local cam = workspace.CurrentCamera
+    if not cam then return end
+
+    local size = cam.ViewportSize
+    local x = size.X / 2
+    local y = size.Y / 2
+
+    VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, game, 0)
+    task.wait()
+    VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, game, 0)
+end
+
+--------------------------------------------------
 -- MAIN LOOP
 --------------------------------------------------
 
 task.spawn(function()
 
     while true do
+        clickCenter()
 
         -----------------------
         -- MEMORIA
