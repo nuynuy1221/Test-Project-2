@@ -3,20 +3,6 @@ task.wait(1)
 
 local targetPlace = 16277809958
 
--- ถ้าไม่ใช่แมพนี้ ให้ลบ MainLobby
-if game.PlaceId ~= targetPlace then
-	local lobby = workspace:FindFirstChild("MainLobby")
-	if lobby then
-		for _, obj in ipairs(lobby:GetChildren()) do
-			if obj.Name ~= "ChallengeBanner" then
-				pcall(function()
-					obj:Destroy()
-				end)
-			end
-		end
-	end
-end
-
 -- ถ้าอยู่แมพ 16277809958 ให้ลบ Assets
 if game.PlaceId == targetPlace then
 	local map2 = workspace:WaitForChild("Map")
