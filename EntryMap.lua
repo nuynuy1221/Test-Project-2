@@ -324,56 +324,51 @@ function DoEnemyIndexFlow_Sky()
 
     local btn
 
-    local start = tick()
-    while tick() - start < 6 do -- กันค้าง
-
-        -- spam click
+    repeat
+        -- spam click เผื่อระบบเร่ง
         ClickGuiCenter(content)
 
         -- 🔥 หา button ทุก loop
         local opt = options:FindFirstChild("Option1")
-        btn = opt and (
-            opt:FindFirstChild("Enemy Index") 
-            or opt:FindFirstChildWhichIsA("TextButton")
-        )
+        btn = opt and (opt:FindFirstChild("Enemy Index") or opt:FindFirstChildWhichIsA("TextButton"))
 
-        -- 🔥 เช็คว่า "กดได้จริง"
+        -- 🔥 ถ้าพร้อมกดก็เลือก
         if btn and btn.Visible and btn.Active then
-            task.wait() -- กันเฟรม
-            print("✅ พร้อมกดแล้ว")
-            break
+            SelectDialogueOption(btn)
         end
 
-        task.wait(0.05)
-    end
+        task.wait(0.1) -- กันเฟรมค้าง
+    until playerGui:FindFirstChild("EnemyIndex") -- loop จน EnemyIndex GUI ขึ้น
 
-    if btn then
-        print("🎯 ใช้ระบบเลือกแทนการคลิก")
-
-        -- รอให้ปุ่มพร้อมจริง
-        repeat task.wait(5)
-        until btn.Visible and btn.AbsoluteSize.X > 0
-
-        SelectDialogueOption(btn)
-    else
-        warn("❌ หาปุ่มไม่เจอ")
-    end
+    print("✅ EnemyIndex GUI ขึ้นแล้ว!")
 
     --========================
-    -- Milestones
+    -- Milestones (แก้ให้รอจนขึ้น EnemyMilestones GUI)
     --========================
-    task.wait(5)
-    local buttonEMS = game:GetService("Players").LocalPlayer.PlayerGui.EnemyIndex.Main.Milestones.Button
+    local playerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    local buttonEMS
 
-    buttonEMS.Selectable = true
-    GuiService.SelectedCoreObject = buttonEMS
+    repeat
+        -- พยายามหา Button
+        local enemyIndexGui = playerGui:FindFirstChild("EnemyIndex")
+        if enemyIndexGui and enemyIndexGui.Main and enemyIndexGui.Main.Milestones then
+            buttonEMS = enemyIndexGui.Main.Milestones:FindFirstChild("Button")
+            if buttonEMS then
+                buttonEMS.Selectable = true
+                GuiService.SelectedCoreObject = buttonEMS
 
-    VirtualInputManager:SendKeyEvent(true,Enum.KeyCode.Return,false,game)
-    VirtualInputManager:SendKeyEvent(false,Enum.KeyCode.Return,false,game)
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
 
-    wait(0.1)
-    GuiService.SelectedCoreObject = nil
+                wait(0.1)
+                GuiService.SelectedCoreObject = nil
+            end
+        end
 
+        task.wait(0.2) -- กันเฟรมค้าง
+    until playerGui:FindFirstChild("EnemyMilestones") -- loop จน GUI EnemyMilestones ขึ้น
+
+    print("✅ EnemyMilestones GUI ขึ้นแล้ว!")
 end
 
 -- =========================
