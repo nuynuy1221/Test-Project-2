@@ -653,7 +653,7 @@ local function startCustomFarm()
 				UnitEvent:FireServer(
                     "Render",
                     {"Warlord (Of the Sea)", "355",
-                    Vector3.new((-264.01666259765625, 0.4105037748813629, -147.55404663085938), 0},
+                    Vector3.new(-264.01666259765625, 0.4105037748813629, -147.55404663085938), 0},
                     {SlotIndex = 5}
                 )
             end
