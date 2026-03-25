@@ -649,14 +649,20 @@ local function startCustomFarm()
                     Vector3.new(-264.0436,0.5438,-141.1557), 0},
                     {SlotIndex = 6}
                 )
-				task.wait(3)
+				task.wait(30)
+				UnitEvent:FireServer(
+                    "Render",
+                    {"Warlord (Of the Sea)", "355",
+                    Vector3.new(-264.4181823730469, 0.544806182384491, -138.78846740722656), 0},
+                    {SlotIndex = 5}
+                )
             end
 
             -- =====================
             -- ⏱ 120 วิ → กลับ Lobby
             -- =====================
-            if tick() - startTime >= 120 then
-                print("🏠 ครบ 120 วิ → กลับ Lobby")
+            if tick() - startTime >= 150 then
+                print("🏠 ครบ 150 วิ → กลับ Lobby")
 
                 pcall(function()
                     TeleportEvent:FireServer("Lobby")
