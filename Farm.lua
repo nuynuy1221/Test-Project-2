@@ -583,12 +583,12 @@ local CustomRunning = false
 local CustomThread = nil
 
 -- ======================
--- CUSTOM FARM (3 WAVE ONLY)
+-- CUSTOM FARM (3 WAVE ONLY - Eizan + Tuji + Ice Queen)
 -- ======================
 local function startCustomFarm()
     if CustomRunning then return end
     CustomRunning = true
-    print("🔥 เริ่มโหมด Custom Level (3 Wave) - Timed Placement")
+    print("🔥 เริ่มโหมด Custom Level (3 Wave) - Eizan Timing")
 
     CustomThread = task.spawn(function()
         local UnitEvent = game:GetService("ReplicatedStorage")
@@ -609,82 +609,48 @@ local function startCustomFarm()
 
             local elapsed = tick() - startTime
 
-            -- วาง Ackers ทันที (Wave 1)
-            if elapsed < 5 and not Executed["Ackers"] then
-                Executed["Ackers"] = true
-                print("📍 วาง Ackers 3 ตัว")
-                local positions = {
-                    Vector3.new(-264.0809326171875, 0.410503089427948, -148.6793975830078),
-                    Vector3.new(-264.0377502441406, 0.4105024039745331, -146.76406860351562),
-                    Vector3.new(-263.95318603515625, 0.5423761010169983, -144.53573608398438)
-                }
-                for _, pos in ipairs(positions) do
-                    UnitEvent:FireServer("Render", {"Ackers", 241, pos, 0}, {SlotIndex = 1})
-                    task.wait(0.6)
-                end
-            end
-
-            -- หลัง 45 วินาที → วาง Bounty Hunter
-            if elapsed >= 45 and elapsed < 50 and not Executed["Bounty"] then
-                Executed["Bounty"] = true
-                print("📍 วาง Bounty Hunter 3 ตัว (หลัง 45 วินาที)")
-                local positions = {
-                    Vector3.new(-267.8616027832031, 0.41050249338150024, -148.51280212402344),
-                    Vector3.new(-267.86376953125, 0.41050150990486145, -146.47824096679688),
-                    Vector3.new(-267.7613220214844, 0.5421318411827087, -144.60604858398438)
-                }
-                for _, pos in ipairs(positions) do
-                    UnitEvent:FireServer("Render", {"Bounty Hunter", 347, pos, 0}, {SlotIndex = 2})
-                    task.wait(0.6)
-                end
-            end
-
-            -- หลังจากนั้นอีก 20 วินาที (รวม ~65 วินาที) → วาง Blossom
-            if elapsed >= 65 and elapsed < 70 and not Executed["Blossom"] then
-                Executed["Blossom"] = true
-                print("📍 วาง Blossom 3 ตัว")
-                local positions = {
-                    Vector3.new(-261.7065124511719, 0.5420223474502563, -144.38897705078125),
-                    Vector3.new(-261.7932434082031, 0.4105037748813629, -146.29556274414062),
-                    Vector3.new(-261.83135986328125, 0.4105037748813629, -148.1641387939453)
-                }
-                for _, pos in ipairs(positions) do
-                    UnitEvent:FireServer("Render", {"Blossom", 46, pos, 0}, {SlotIndex = 4})
-                    task.wait(0.6)
-                end
-            end
-
-            -- หลังจากนั้นอีก 20 วินาที (รวม ~85 วินาที) → วาง Warlord
-            if elapsed >= 85 and elapsed < 90 and not Executed["Warlord"] then
-                Executed["Warlord"] = true
-                print("📍 วาง Warlord (Of the Sea)")
+            -- ==================== วาง Eizan ทันที ====================
+            if elapsed < 8 then
+                print("📍 วาง Eizan (Aura) 1 ตัว")
                 UnitEvent:FireServer("Render", 
-                    {"Warlord (Of the Sea)", 355, Vector3.new(-265.0277404785156, 0.5449867248535156, -138.28575134277344), 0}, 
-                    {SlotIndex = 5}
+                    {"Eizan (Aura)", "148:Evolved", Vector3.new(445.74847412109375, 2.29998779296875, -341.93768310546875), 0}, 
+                    {SlotIndex = 1}
                 )
+                task.wait(3)
             end
 
-            -- หลังจากนั้นอีก 10 วินาที (รวม ~95 วินาที) → วาง Tuji 3 ตัว
-            if elapsed >= 95 and elapsed < 100 and not Executed["Tuji"] then
-                Executed["Tuji"] = true
-                print("📍 วาง Tuji (Sorcerer Killer) 3 ตัว")
-                local positions = {
-                    Vector3.new(-267.3894958496094, 0.5448089241981506, -138.39100646972656),
-                    Vector3.new(-261.9541015625, 0.5451767444610596, -138.2457275390625),
-                    Vector3.new(-262.3167419433594, 0.5459041595458984, -136.49600219726562)
+            -- ==================== หลัง 45 วินาที → วาง Tuji 3 ตัว ====================
+            if elapsed >= 55 then
+                print("📍 วาง Tuji (Sorcerer Killer) 3 ตัว (หลัง 55 วินาที)")
+                
+                local tujiPositions = {
+                    Vector3.new(445.5354309082031, 2.29998779296875, -345.1536865234375),
+                    Vector3.new(445.4750061035156, 2.29998779296875, -339.2325134277344),
+                    Vector3.new(448.35382080078125, 2.29998779296875, -341.8939514160156)
                 }
-                for _, pos in ipairs(positions) do
+
+                for _, pos in ipairs(tujiPositions) do
                     UnitEvent:FireServer("Render", 
                         {"Tuji (Sorcerer Killer)", "65:Evolved", pos, 0}, 
-                        {SlotIndex = 6}
+                        {SlotIndex = 2}
                     )
-                    task.wait(0.6)
+                    task.wait(3)
                 end
             end
 
-            -- หลังจากนั้นรอจนครบเวลา → กลับ Lobby
-            if elapsed >= 135 then
-                print("🏠 ครบ 135 วินาที → กลับ Lobby")
+            -- ==================== หลังจากนั้นอีก 30 วินาที → วาง Ice Queen ====================
+            if elapsed >= 75 then
+                print("📍 วาง Ice Queen (Release) 1 ตัว (หลัง 75 วินาที)")
+                UnitEvent:FireServer("Render", 
+                    {"Ice Queen (Release)", 363, Vector3.new(451.5220642089844, 2.29998779296875, -343.04156494140625), 0}, 
+                    {SlotIndex = 6}
+                )
+                task.wait(3)
+            end
+
+            -- ==================== กลับ Lobby หลัง 255 วินาที ====================
+            if elapsed >= 255 then
+                print("🏠 ครบ 255 วินาที → กลับ Lobby")
                 pcall(function()
                     TeleportEvent:FireServer("Lobby")
                 end)
