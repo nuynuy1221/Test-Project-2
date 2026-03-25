@@ -266,6 +266,7 @@ task.spawn(function()
             if level >= 30 then
                 if hasUnclaimedMilestone() then
                     playMilestoneLevel()
+                    print("💠 ไปเก็บ Enemy Index")
                     task.wait(5)
                     return -- ❗ ข้าม logic อื่นทั้งหมด
                 end
