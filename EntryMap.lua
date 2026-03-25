@@ -424,7 +424,7 @@ end
 -- Play Custom
 -- =========================
 local function playMilestoneLevel()
-    local CustomRR = {312}
+    local CustomRR = {1334}
 
     print("🚀 ไปลงด่านเพราะ Milestone ยังไม่ครบ")
 
