@@ -177,6 +177,68 @@ local summonArgs50 = {"SummonMany", "Winter26", 50}
 local memoriaArgs = {"SummonMany", "WinterMemoria", 10}
 local memoriaArgs50 = {"SummonMany", "WinterMemoria", 50}
 
+-- =========================
+-- Check Enemy Index Milestone
+-- =========================
+local function hasUnclaimedMilestone()
+
+    local player = game:GetService("Players").LocalPlayer
+
+    local ok, list = pcall(function()
+        return player.PlayerGui.EnemyMilestones.Holder.List
+    end)
+
+    if not ok or not list then
+        return false
+    end
+
+    -- index ที่ต้องเช็ค
+    local checkIndexes = {4,5,6,7,8,9,10,11,12,13,14,15,16}
+
+    for _, i in ipairs(checkIndexes) do
+        local item = list:FindFirstChild(tostring(i)) or list:GetChildren()[i]
+
+        if item then
+            local ok2, label = pcall(function()
+                return item.Button.Label
+            end)
+
+            if ok2 and label and label:IsA("TextLabel") then
+                if label.Text ~= "Claimed" then
+                    print("❗ เจอ Milestone ยังไม่รับ:", i, "| Text:", label.Text)
+                    return true
+                end
+            end
+        end
+    end
+
+    -- เช็ค RewardFrame เพิ่ม
+    local ok3, rewardLabel = pcall(function()
+        return list.RewardFrame.MilestoneInfo.MilestoneName
+    end)
+
+    if ok3 and rewardLabel and rewardLabel:IsA("TextLabel") then
+        -- ถ้ามี RewardFrame แสดงว่ายังมีของ
+        print("❗ RewardFrame ยังมี")
+        return true
+    end
+
+    return false
+end
+
+local function playMilestoneLevel()
+    local CustomRR = {312}
+
+    print("🚀 ไปลงด่านเพราะ Milestone ยังไม่ครบ")
+
+    pcall(function()
+        game:GetService("ReplicatedStorage")
+            :WaitForChild("Networking")
+            :WaitForChild("Levels")
+            :WaitForChild("Play")
+            :FireServer(unpack(CustomRR))
+    end)
+end
 
 -- =========================
 -- ลูปหลัก (เพิ่ม pcall ห่อเพื่อป้องกัน crash)
@@ -185,6 +247,7 @@ task.spawn(function()
     while true do
         local DelayCheck = 0.2
         local success, err = pcall(function()
+            
             local level = getLevel()
             local presents = getPresents26()
 
@@ -198,6 +261,15 @@ task.spawn(function()
                 "| Has Memoria:", hasMemoria,
                 "| BuyMemoria:", Config.BuyMemoria
             )
+                    
+            -- ✅ เช็ค Milestone ก่อนทุกอย่าง
+            if level >= 30 then
+                if hasUnclaimedMilestone() then
+                    playMilestoneLevel()
+                    task.wait(5)
+                    return -- ❗ ข้าม logic อื่นทั้งหมด
+                end
+            end
 
             -- ❌ ไม่เข้า Story แล้ว ไม่สน Level
             -- ทำแต่ Winter เท่านั้น
