@@ -13,6 +13,19 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
 local TweenService = game:GetService("TweenService")
 
+local function isCustomLevel()
+    local ok, text = pcall(function()
+        return game:GetService("Players").LocalPlayer
+            .PlayerGui.Guides.List.StageInfo.StageFrame.StageType.Text
+    end)
+
+    if ok and text == "Custom Level" then
+        return true
+    end
+
+    return false
+end
+
 -- ลอย
 local function freezeChar()
 	local char = player.Character
@@ -566,6 +579,102 @@ local function applyMonachToUnit(unitName, limit)
 	end
 end
 
+local CustomRunning = false
+local CustomThread = nil
+
+local function startCustomFarm()
+    if CustomRunning then return end
+    CustomRunning = true
+
+    print("🔥 เริ่มโหมด Custom Level")
+
+    CustomThread = task.spawn(function()
+
+        local UnitEvent = game:GetService("ReplicatedStorage")
+            :WaitForChild("Networking")
+            :WaitForChild("UnitEvent")
+
+        local TeleportEvent = game:GetService("ReplicatedStorage")
+            :WaitForChild("Networking")
+            :WaitForChild("TeleportEvent")
+
+        local startTime = tick()
+
+        while CustomRunning do
+            task.wait(0.2)
+
+            -- ❌ ถ้าไม่ใช่ Custom แล้ว หยุดทันที
+            if not isCustomLevel() then
+                print("🛑 ออกจาก Custom Level → หยุด")
+                CustomRunning = false
+                break
+            end
+
+            local wave = getWave()
+            if not wave then continue end
+
+            -- =====================
+            -- WAVE 1+
+            -- =====================
+            if wave >= 1 then
+                UnitEvent:FireServer(
+                    "Render",
+                    {"Tuji (Sorcerer Killer)", "65:Evolved",
+                    Vector3.new(-266.7936,0.5423,-144.2697), 0},
+                    {SlotIndex = 6}
+                )
+            end
+
+            -- =====================
+            -- WAVE 2+
+            -- =====================
+            if wave >= 2 then
+                UnitEvent:FireServer(
+                    "Render",
+                    {"Tuji (Sorcerer Killer)", "65:Evolved",
+                    Vector3.new(-261.2207,0.5418,-144.4766), 0},
+                    {SlotIndex = 6}
+                )
+            end
+
+            -- =====================
+            -- WAVE 3+
+            -- =====================
+            if wave >= 3 then
+                UnitEvent:FireServer(
+                    "Render",
+                    {"Tuji (Sorcerer Killer)", "65:Evolved",
+                    Vector3.new(-264.0436,0.5438,-141.1557), 0},
+                    {SlotIndex = 6}
+                )
+            end
+
+            -- =====================
+            -- ⏱ 120 วิ → กลับ Lobby
+            -- =====================
+            if tick() - startTime >= 120 then
+                print("🏠 ครบ 120 วิ → กลับ Lobby")
+
+                pcall(function()
+                    TeleportEvent:FireServer("Lobby")
+                end)
+
+                CustomRunning = false
+                break
+            end
+        end
+    end)
+end
+
+local function stopCustomFarm()
+    if not CustomRunning then return end
+
+    CustomRunning = false
+    CustomThread = nil
+
+    print("🛑 หยุด Custom Farm")
+end
+
 -- ======================
 -- LOOP CHECK WAVE
 -- ======================
@@ -573,6 +682,22 @@ task.spawn(function()
 	while task.wait(0.5) do
 		local wave = getWave()
 		if wave == nil then continue end
+
+		if isCustomLevel() then
+    		if not CustomRunning then
+				local CustomStart = {
+    				[1] = "Start"
+				}
+
+				game:GetService("ReplicatedStorage"):WaitForChild("Networking"):WaitForChild("CustomLevelEditor"):WaitForChild("ReplayMatch"):FireServer(unpack(CustomStart))
+        		startCustomFarm()
+    		end
+
+    		task.wait(1)
+    		continue
+		else
+    		stopCustomFarm() -- ✅ ออกจาก custom แล้วหยุด
+		end
 
 		-- =========================
 		-- RESET STATE (WAVE 0)
