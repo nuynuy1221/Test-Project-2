@@ -623,6 +623,7 @@ local function startCustomFarm()
                     Vector3.new(-266.7936,0.5423,-144.2697), 0},
                     {SlotIndex = 6}
                 )
+				task.wait(3)
             end
 
             -- =====================
@@ -635,6 +636,7 @@ local function startCustomFarm()
                     Vector3.new(-261.2207,0.5418,-144.4766), 0},
                     {SlotIndex = 6}
                 )
+				task.wait(3)
             end
 
             -- =====================
@@ -647,6 +649,7 @@ local function startCustomFarm()
                     Vector3.new(-264.0436,0.5438,-141.1557), 0},
                     {SlotIndex = 6}
                 )
+				task.wait(3)
             end
 
             -- =====================
