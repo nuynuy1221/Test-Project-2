@@ -31,6 +31,9 @@ local Networking = ReplicatedStorage:WaitForChild("Networking")
 local CodesEvent = Networking:WaitForChild("CodesEvent", 5)
 local DailyRewardEvent = Networking:WaitForChild("DailyRewardEvent")
 local MilestonesEvent = Networking:WaitForChild("Milestones"):WaitForChild("MilestonesEvent")
+local EnemyMilestonesEvent = Networking
+    :WaitForChild("Milestones")
+    :WaitForChild("EnemyMilestonesEvent", 5)
 local QuestEvent = Networking:WaitForChild("Quests"):WaitForChild("ClaimQuest")
 local BattlepassEvent = Networking:WaitForChild("BattlepassEvent")
 local ReturningPlayerEvent = Networking:WaitForChild("ReturningPlayerEvent")
@@ -98,6 +101,15 @@ end
 --================ MILESTONES ===================
 for _, milestone in ipairs({5,10,15,20,25,30,35,40,45,50,55,60,65,70,75}) do
     safeFire(MilestonesEvent, {"Claim", milestone})
+end
+
+--================ ENEMY MILESTONES ===================
+if EnemyMilestonesEvent then
+    for i = 1, 14 do
+        safeFire(EnemyMilestonesEvent, {"Claim", "Story/Stage" .. i})
+    end
+else
+    warn("⚠️ ไม่เจอ EnemyMilestonesEvent")
 end
 
 --================ QUESTS ===================
