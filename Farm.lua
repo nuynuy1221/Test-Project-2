@@ -585,6 +585,9 @@ local CustomThread = nil
 -- ======================
 -- CUSTOM FARM (3 WAVE ONLY - Eizan + Tuji + Ice Queen)
 -- ======================
+-- ======================
+-- CUSTOM FARM (3 WAVE ONLY - Eizan + Tuji + Ice Queen)
+-- ======================
 local function startCustomFarm()
     if CustomRunning then return end
     CustomRunning = true
@@ -610,18 +613,19 @@ local function startCustomFarm()
             local elapsed = tick() - startTime
 
             -- ==================== วาง Eizan ทันที ====================
-            if elapsed < 8 then
+            if elapsed < 8 and not Executed["Eizan"] then
+                Executed["Eizan"] = true
                 print("📍 วาง Eizan (Aura) 1 ตัว")
                 UnitEvent:FireServer("Render", 
                     {"Eizan (Aura)", "148:Evolved", Vector3.new(445.74847412109375, 2.29998779296875, -341.93768310546875), 0}, 
                     {SlotIndex = 1}
                 )
-                wait(3)
             end
 
             -- ==================== หลัง 45 วินาที → วาง Tuji 3 ตัว ====================
-            if elapsed >= 55 then
-                print("📍 วาง Tuji (Sorcerer Killer) 3 ตัว (หลัง 55 วินาที)")
+            if elapsed >= 45 and elapsed < 52 and not Executed["Tuji"] then
+                Executed["Tuji"] = true
+                print("📍 วาง Tuji (Sorcerer Killer) 3 ตัว (หลัง 45 วินาที)")
                 
                 local tujiPositions = {
                     Vector3.new(445.5354309082031, 2.29998779296875, -345.1536865234375),
@@ -634,23 +638,23 @@ local function startCustomFarm()
                         {"Tuji (Sorcerer Killer)", "65:Evolved", pos, 0}, 
                         {SlotIndex = 2}
                     )
-                    wait(3)
+                    task.wait(0.7)
                 end
             end
 
             -- ==================== หลังจากนั้นอีก 30 วินาที → วาง Ice Queen ====================
-            if elapsed >= 75 then
+            if elapsed >= 75 and elapsed < 82 and not Executed["IceQueen"] then
+                Executed["IceQueen"] = true
                 print("📍 วาง Ice Queen (Release) 1 ตัว (หลัง 75 วินาที)")
                 UnitEvent:FireServer("Render", 
                     {"Ice Queen (Release)", 363, Vector3.new(451.5220642089844, 2.29998779296875, -343.04156494140625), 0}, 
                     {SlotIndex = 6}
                 )
-                wait(3)
             end
 
-            -- ==================== กลับ Lobby หลัง 255 วินาที ====================
-            if elapsed >= 255 then
-                print("🏠 ครบ 255 วินาที → กลับ Lobby")
+            -- ==================== กลับ Lobby หลัง 135 วินาที ====================
+            if elapsed >= 135 then
+                print("🏠 ครบ 135 วินาที → กลับ Lobby")
                 pcall(function()
                     TeleportEvent:FireServer("Lobby")
                 end)
