@@ -396,7 +396,7 @@ local function hasUnclaimedMilestone()
     print("✅ เจอ EnemyMilestones แล้ว กำลังเช็ค...")
 
     -- index ที่ต้องเช็ค
-    local checkIndexes = {4,5,7,8,9,10,11,12,13,15,16}
+    local checkIndexes = {4,5,7,8,9,10,11,12,13,14,15,16}
 
     for _, i in ipairs(checkIndexes) do
         local item = list:FindFirstChild(tostring(i)) or list:GetChildren()[i]
