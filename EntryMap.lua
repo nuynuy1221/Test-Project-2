@@ -372,13 +372,11 @@ function DoEnemyIndexFlow_Sky()
 end
 
 -- =========================
--- Check Enemy Index Milestone
+-- Check Enemy Index Milestone (แก้ให้เช็ค Index 8 เป็นพิเศษ)
 -- =========================
 local function hasUnclaimedMilestone()
-
     DoEnemyIndexFlow_Sky()
-    local player = game:GetService("Players").LocalPlayer
-
+    
     local enemyGui = player.PlayerGui:FindFirstChild("EnemyMilestones")
     if not enemyGui then
         warn("❌ EnemyMilestones GUI ยังไม่โหลด")
@@ -387,53 +385,73 @@ local function hasUnclaimedMilestone()
 
     local holder = enemyGui:FindFirstChild("Holder")
     local list = holder and holder:FindFirstChild("List")
-
     if not list then
         warn("❌ หา List ไม่เจอ")
         return false
     end
 
-    print("✅ เจอ EnemyMilestones แล้ว กำลังเช็ค...")
+    print("✅ เช็ค EnemyMilestones + Index [8]")
 
-    -- index ที่ต้องเช็ค
-    local checkIndexes = {4,5,7,8,9,10,11,12,13,14,15,16}
+    -- เช็ค Index 8 เป็นพิเศษ (ตามที่คุณต้องการ)
+    local item8 = list:GetChildren()[8]
+    if item8 then
+        local label = item8:FindFirstChild("Button") and item8.Button:FindFirstChild("Label")
+        if label and label:IsA("TextLabel") then
+            print("🔎 Index 8 =", label.Text)
+            if label.Text ~= "Claimed" then
+                print("❗ Index 8 ยังไม่ Claim → จะเล่นด่าน 312")
+                return true
+            end
+        end
+    end
 
+    -- เช็ค Index อื่น ๆ เพิ่มเติม
+    local checkIndexes = {4,5,7,9,10,11,12,13,14,15,16}
     for _, i in ipairs(checkIndexes) do
         local item = list:FindFirstChild(tostring(i)) or list:GetChildren()[i]
-
         if item then
-            local label = item:FindFirstChild("Button")
-                and item.Button:FindFirstChild("Label")
+            local label = item:FindFirstChild("Button") and item.Button:FindFirstChild("Label")
+            if label and label:IsA("TextLabel") and label.Text ~= "Claimed" then
+                print("❗ เจอ Milestone ยังไม่รับที่ Index:", i)
+                return true
+            end
+        end
+    end
 
-            if label and label:IsA("TextLabel") then
-                print("🔎 Index", i, "=", label.Text)
+    print("✅ ไม่มี Milestone ค้าง")
+    return false
+end
 
-                if label.Text ~= "Claimed" then
-                    print("❗ เจอ Milestone ยังไม่รับ:", i)
-                    return true
+-- =========================
+-- Play Custom Level (เปลี่ยนด่านตาม Index 8)
+-- =========================
+local function playMilestoneLevel()
+    local levelId = 1334  -- ค่าเริ่มต้น
+
+    -- เช็ค Index 8 เป็นพิเศษ
+    local enemyGui = player.PlayerGui:FindFirstChild("EnemyMilestones")
+    if enemyGui then
+        local holder = enemyGui:FindFirstChild("Holder")
+        local list = holder and holder:FindFirstChild("List")
+        if list then
+            local item8 = list:GetChildren()[8]
+            if item8 then
+                local label = item8:FindFirstChild("Button") and item8.Button:FindFirstChild("Label")
+                if label and label:IsA("TextLabel") and label.Text ~= "Claimed" then
+                    levelId = 312
+                    print("🔄 เปลี่ยนเป็นด่าน 312 เพราะ Index 8 ยังไม่ Claim")
                 end
             end
         end
     end
 
-    print("✅ ไม่มี Milestone ค้างจริง")
-    return false
-end
-
--- =========================
--- Play Custom
--- =========================
-local function playMilestoneLevel()
-    local CustomRR = {1334}
-
-    print("🚀 ไปลงด่านเพราะ Milestone ยังไม่ครบ")
-
+    print("🚀 เล่นด่าน ID:", levelId)
     pcall(function()
         game:GetService("ReplicatedStorage")
             :WaitForChild("Networking")
             :WaitForChild("Levels")
             :WaitForChild("Play")
-            :FireServer(unpack(CustomRR))
+            :FireServer(levelId)
     end)
 end
 
