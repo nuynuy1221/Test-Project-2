@@ -70,14 +70,3 @@ task.spawn(function()
         end
     end
 end)
-ด้วยสคริปนี้
-local function isCustomLevel()
-    local ok, text = pcall(function()
-        return game:GetService("Players").LocalPlayer
-            .PlayerGui.Guides.List.StageInfo.StageFrame.StageType.Text
-    end)
-    if ok and text == "Custom Level" then
-        return true
-    end
-    return false
-end
