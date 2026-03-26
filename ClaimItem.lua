@@ -105,8 +105,9 @@ end
 
 --================ ENEMY MILESTONES ===================
 if EnemyMilestonesEvent then
-    for i = 1, 14 do
+    for i = 1, 12 do
         safeFire(EnemyMilestonesEvent, {"Claim", "Story/Stage" .. i})
+        safeFire(EnemyMilestonesEvent, {"Claim", "Raid/Stage" .. i})
     end
 else
     warn("⚠️ ไม่เจอ EnemyMilestonesEvent")
