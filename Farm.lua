@@ -583,15 +583,12 @@ local CustomRunning = false
 local CustomThread = nil
 
 -- ======================
--- CUSTOM FARM (3 WAVE ONLY - Eizan + Tuji + Ice Queen)
--- ======================
--- ======================
--- CUSTOM FARM (3 WAVE ONLY - Eizan + Tuji + Ice Queen)
+-- CUSTOM FARM (3 WAVE ONLY - วางครั้งแรก + ซ้ำทุก 3 วินาที)
 -- ======================
 local function startCustomFarm()
     if CustomRunning then return end
     CustomRunning = true
-    print("🔥 เริ่มโหมด Custom Level (3 Wave) - Eizan Timing")
+    print("🔥 เริ่มโหมด Custom Level (3 Wave) - วางครั้งแรก + ซ้ำทุก 3 วินาที")
 
     CustomThread = task.spawn(function()
         local UnitEvent = game:GetService("ReplicatedStorage")
@@ -601,8 +598,17 @@ local function startCustomFarm()
 
         local startTime = tick()
 
+        -- ตัวแปรควบคุมเวลา
+        local warlordFirstPlaced = false
+        local tujiFirstPlaced = false
+        local ackersFirstPlaced = false
+
+        local lastWarlordRepeat = 0
+        local lastTujiRepeat = 0
+        local lastAckersRepeat = 0
+
         while CustomRunning do
-            task.wait(0.2)
+            task.wait(0.15)
 
             if not isCustomLevel() then
                 print("🛑 ออกจาก Custom Level → หยุด")
@@ -612,49 +618,85 @@ local function startCustomFarm()
 
             local elapsed = tick() - startTime
 
-            -- ==================== วาง Eizan ทันที ====================
-            if elapsed < 8 and not Executed["Eizan"] then
-                Executed["Eizan"] = true
-                print("📍 วาง Eizan (Aura) 1 ตัว")
-                UnitEvent:FireServer("Render", 
-                    {"Eizan (Aura)", "148:Evolved", Vector3.new(445.74847412109375, 2.29998779296875, -341.93768310546875), 0}, 
+            -- ==================== วางครั้งแรก ====================
+            if not warlordFirstPlaced and elapsed >= 3 then
+                warlordFirstPlaced = true
+                print("📍 วาง Warlord (Of the Sea) ครั้งแรก")
+                UnitEvent:FireServer("Render",
+                    {"Warlord (Of the Sea)", 355, Vector3.new(-264.05078125, 0.5437054634094238, -141.412353515625), 0},
+                    {SlotIndex = 5}
+                )
+            end
+
+            if not tujiFirstPlaced and elapsed >= 45 then
+                tujiFirstPlaced = true
+                print("📍 วาง Tuji (Sorcerer Killer) 3 ตัว ครั้งแรก")
+                local tujiPositions = {
+                    Vector3.new(-261.3935241699219, 0.5454464554786682, -137.68838500976562),
+                    Vector3.new(-263.14117431640625, 0.5454050302505493, -137.5552978515625),
+                    Vector3.new(-265.1268615722656, 0.5452961921691895, -137.5487060546875)
+                }
+                for _, pos in ipairs(tujiPositions) do
+                    UnitEvent:FireServer("Render",
+                        {"Tuji (Sorcerer Killer)", "65:Evolved", pos, 0},
+                        {SlotIndex = 6}
+                    )
+                    task.wait(0.6)
+                end
+            end
+
+            if not ackersFirstPlaced and elapsed >= 52 then
+                ackersFirstPlaced = true
+                print("📍 วาง Ackers ครั้งแรก")
+                UnitEvent:FireServer("Render",
+                    {"Ackers", 241, Vector3.new(-263.8894958496094, 0.6169147491455078, -125.61129760742188), 0},
                     {SlotIndex = 1}
                 )
             end
 
-            -- ==================== หลัง 45 วินาที → วาง Tuji 3 ตัว ====================
-            if elapsed >= 45 and elapsed < 52 and not Executed["Tuji"] then
-                Executed["Tuji"] = true
-                print("📍 วาง Tuji (Sorcerer Killer) 3 ตัว (หลัง 45 วินาที)")
-                
-                local tujiPositions = {
-                    Vector3.new(445.5354309082031, 2.29998779296875, -345.1536865234375),
-                    Vector3.new(445.4750061035156, 2.29998779296875, -339.2325134277344),
-                    Vector3.new(448.35382080078125, 2.29998779296875, -341.8939514160156)
-                }
+            -- ==================== วางซ้ำทุก 3 วินาที (หลังจากวางครั้งแรกแล้ว) ====================
 
-                for _, pos in ipairs(tujiPositions) do
-                    UnitEvent:FireServer("Render", 
-                        {"Tuji (Sorcerer Killer)", "65:Evolved", pos, 0}, 
-                        {SlotIndex = 2}
-                    )
-                    task.wait(0.7)
-                end
-            end
-
-            -- ==================== หลังจากนั้นอีก 30 วินาที → วาง Ice Queen ====================
-            if elapsed >= 75 and elapsed < 82 and not Executed["IceQueen"] then
-                Executed["IceQueen"] = true
-                print("📍 วาง Ice Queen (Release) 1 ตัว (หลัง 75 วินาที)")
-                UnitEvent:FireServer("Render", 
-                    {"Ice Queen (Release)", 363, Vector3.new(451.5220642089844, 2.29998779296875, -343.04156494140625), 0}, 
-                    {SlotIndex = 6}
+            -- Warlord ซ้ำทุก 3 วินาที
+            if warlordFirstPlaced and tick() - lastWarlordRepeat >= 3 then
+                lastWarlordRepeat = tick()
+                print("🔁 วาง Warlord ซ้ำทุก 3 วินาที")
+                UnitEvent:FireServer("Render",
+                    {"Warlord (Of the Sea)", 355, Vector3.new(-264.05078125, 0.5437054634094238, -141.412353515625), 0},
+                    {SlotIndex = 5}
                 )
             end
 
-            -- ==================== กลับ Lobby หลัง 135 วินาที ====================
-            if elapsed >= 135 then
-                print("🏠 ครบ 135 วินาที → กลับ Lobby")
+            -- Tuji ซ้ำทุก 3 วินาที
+            if tujiFirstPlaced and tick() - lastTujiRepeat >= 3 then
+                lastTujiRepeat = tick()
+                print("🔁 วาง Tuji 3 ตัว ซ้ำทุก 3 วินาที")
+                local tujiPositions = {
+                    Vector3.new(-261.3935241699219, 0.5454464554786682, -137.68838500976562),
+                    Vector3.new(-263.14117431640625, 0.5454050302505493, -137.5552978515625),
+                    Vector3.new(-265.1268615722656, 0.5452961921691895, -137.5487060546875)
+                }
+                for _, pos in ipairs(tujiPositions) do
+                    UnitEvent:FireServer("Render",
+                        {"Tuji (Sorcerer Killer)", "65:Evolved", pos, 0},
+                        {SlotIndex = 6}
+                    )
+                    task.wait(0.5)
+                end
+            end
+
+            -- Ackers ซ้ำทุก 3 วินาที
+            if ackersFirstPlaced and tick() - lastAckersRepeat >= 3 then
+                lastAckersRepeat = tick()
+                print("🔁 วาง Ackers ซ้ำทุก 3 วินาที")
+                UnitEvent:FireServer("Render",
+                    {"Ackers", 241, Vector3.new(-263.8894958496094, 0.6169147491455078, -125.61129760742188), 0},
+                    {SlotIndex = 1}
+                )
+            end
+
+            -- กลับ Lobby หลัง 105 วินาที (แนะนำให้ขยายเวลาให้มากขึ้นถ้าวางซ้ำ)
+            if elapsed >= 105 then
+                print("🏠 ครบ 105 วินาที → กลับ Lobby")
                 pcall(function()
                     TeleportEvent:FireServer("Lobby")
                 end)
