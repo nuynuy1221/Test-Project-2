@@ -371,12 +371,9 @@ function DoEnemyIndexFlow_Sky()
     print("✅ EnemyMilestones GUI ขึ้นแล้ว!")
 end
 
--- =========================
--- Check Enemy Index Milestone (แก้ให้เช็ค Index 8 เป็นพิเศษ)
--- =========================
 local function hasUnclaimedMilestone()
     DoEnemyIndexFlow_Sky()
-    
+   
     local enemyGui = player.PlayerGui:FindFirstChild("EnemyMilestones")
     if not enemyGui then
         warn("❌ EnemyMilestones GUI ยังไม่โหลด")
@@ -390,23 +387,10 @@ local function hasUnclaimedMilestone()
         return false
     end
 
-    print("✅ เช็ค EnemyMilestones + Index [8]")
+    print("✅ เช็ค EnemyMilestones")
 
-    -- เช็ค Index 8 เป็นพิเศษ (ตามที่คุณต้องการ)
-    local item8 = list:GetChildren()[8]
-    if item8 then
-        local label = item8:FindFirstChild("Button") and item8.Button:FindFirstChild("Label")
-        if label and label:IsA("TextLabel") then
-            print("🔎 Index 8 =", label.Text)
-            if label.Text ~= "Claimed" then
-                print("❗ Index 8 ยังไม่ Claim → จะเล่นด่าน 312")
-                return true
-            end
-        end
-    end
-
-    -- เช็ค Index อื่น ๆ เพิ่มเติม
-    local checkIndexes = {4,5,7,9,10,11,12,13,14,15,16}
+    -- เช็ค Index อื่น ๆ (ไม่รวมการบังคับ 312 แล้ว)
+    local checkIndexes = {4,5,7,8,9,10,11,12,13,14,15,16}
     for _, i in ipairs(checkIndexes) do
         local item = list:FindFirstChild(tostring(i)) or list:GetChildren()[i]
         if item then
