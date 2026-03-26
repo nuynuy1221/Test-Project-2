@@ -648,9 +648,9 @@ local function startCustomFarm()
                 wait(3)
             end
 
-            -- ==================== กลับ Lobby หลัง 135 วินาที ====================
-            if elapsed >= 135 then
-                print("🏠 ครบ 135 วินาที → กลับ Lobby")
+            -- ==================== กลับ Lobby หลัง 120 วินาที ====================
+            if elapsed >= 120 then
+                print("🏠 ครบ 120 วินาที → กลับ Lobby")
                 pcall(function()
                     TeleportEvent:FireServer("Lobby")
                 end)
