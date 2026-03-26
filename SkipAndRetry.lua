@@ -14,6 +14,19 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Networking = ReplicatedStorage:WaitForChild("Networking")
 
 -- =========================
+-- ฟังก์ชันเช็ค Custom Level
+-- =========================
+local function isCustomLevel()
+    local ok, text = pcall(function()
+        return player.PlayerGui.Guides.List.StageInfo.StageFrame.StageType.Text
+    end)
+    if ok and text == "Custom Level" then
+        return true
+    end
+    return false
+end
+
+-- =========================
 -- ฟังก์ชัน Skip Wave
 -- =========================
 local function pressSkipButton()
@@ -41,7 +54,7 @@ local function voteMatchRestart()
 end
 
 -- =========================
--- ฟังก์ชันเช็ค Wave (ใช้ ContentText และดึงเลขก่อน '/')
+-- ฟังก์ชันเช็ค Wave
 -- =========================
 local function getWave()
     local ok, waveObj = pcall(function()
@@ -55,23 +68,27 @@ local function getWave()
 end
 
 -- =========================
--- Loop ทุก 2 วินาที สำหรับ Skip
+-- Loop สำหรับ Skip Wave (ยกเว้น Custom Level)
 -- =========================
 task.spawn(function()
     while true do
         task.wait(2)
-        pressSkipButton()
+        
+        if not isCustomLevel() then
+            pressSkipButton()
+        end
+        -- ถ้าเป็น Custom Level จะข้ามการกด Skip อัตโนมัติ
     end
 end)
 
 -- =========================
--- Loop ทุก 15 วินาที สำหรับ Retry + Vote MatchRestart เฉพาะ Wave >= 20
+-- Loop สำหรับ Retry + Vote MatchRestart
 -- =========================
 task.spawn(function()
     while true do
         task.wait(15)
         pressRetryButton()
-
+        
         local wave = getWave()
         if wave >= 140 then
             task.wait(5)
@@ -79,3 +96,5 @@ task.spawn(function()
         end
     end
 end)
+
+print("✅ สคริปต์ Skip Wave ทำงานแล้ว (ข้าม Skip เมื่อเป็น Custom Level)")
