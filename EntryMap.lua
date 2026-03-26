@@ -423,29 +423,14 @@ local function hasUnclaimedMilestone()
 end
 
 -- =========================
--- Play Custom Level (เปลี่ยนด่านตาม Index 8)
+-- Play Custom Level (สุ่มระหว่าง 1334 กับ 312)
 -- =========================
 local function playMilestoneLevel()
-    local levelId = 1334  -- ค่าเริ่มต้น
+    -- สุ่ม 50% ระหว่าง 1334 และ 312
+    local levelId = math.random(1, 2) == 1 and 1334 or 312
 
-    -- เช็ค Index 8 เป็นพิเศษ
-    local enemyGui = player.PlayerGui:FindFirstChild("EnemyMilestones")
-    if enemyGui then
-        local holder = enemyGui:FindFirstChild("Holder")
-        local list = holder and holder:FindFirstChild("List")
-        if list then
-            local item8 = list:GetChildren()[8]
-            if item8 then
-                local label = item8:FindFirstChild("Button") and item8.Button:FindFirstChild("Label")
-                if label and label:IsA("TextLabel") and label.Text ~= "Claimed" then
-                    levelId = 312
-                    print("🔄 เปลี่ยนเป็นด่าน 312 เพราะ Index 8 ยังไม่ Claim")
-                end
-            end
-        end
-    end
+    print("🎲 สุ่มด่าน Milestone → เล่นด่าน ID:", levelId)
 
-    print("🚀 เล่นด่าน ID:", levelId)
     pcall(function()
         game:GetService("ReplicatedStorage")
             :WaitForChild("Networking")
