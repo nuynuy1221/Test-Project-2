@@ -616,7 +616,7 @@ local function startCustomFarm()
                     {"Eizan (Aura)", "148:Evolved", Vector3.new(445.74847412109375, 2.29998779296875, -341.93768310546875), 0}, 
                     {SlotIndex = 1}
                 )
-                task.wait(3)
+                wait(3)
             end
 
             -- ==================== หลัง 45 วินาที → วาง Tuji 3 ตัว ====================
@@ -634,7 +634,7 @@ local function startCustomFarm()
                         {"Tuji (Sorcerer Killer)", "65:Evolved", pos, 0}, 
                         {SlotIndex = 2}
                     )
-                    task.wait(3)
+                    wait(3)
                 end
             end
 
@@ -645,7 +645,7 @@ local function startCustomFarm()
                     {"Ice Queen (Release)", 363, Vector3.new(451.5220642089844, 2.29998779296875, -343.04156494140625), 0}, 
                     {SlotIndex = 6}
                 )
-                task.wait(3)
+                wait(3)
             end
 
             -- ==================== กลับ Lobby หลัง 255 วินาที ====================
