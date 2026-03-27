@@ -259,18 +259,50 @@ function DoEnemyIndexFlow_Sky()
     local player = Players.LocalPlayer
     local hrp = (player.Character or player.CharacterAdded:Wait()):WaitForChild("HumanoidRootPart")
 
-    -- 📍 ไปหา Okabu ตรง ๆ
+    -- =========================
+    -- 🔥 ไปหา Lights / Lighting ก่อน
+    -- =========================
+    local lightTargetCF
+
+    pcall(function()
+        local play = workspace:WaitForChild("MainLobby")
+            :WaitForChild("Gamemodes")
+            :WaitForChild("Play")
+
+        local light = play:WaitForChild("Lights / Lighting")
+
+        -- ⚠️ ใช้ index แต่กันพัง
+        local children = light:GetChildren()
+        local target = children[9]
+
+        if target then
+            lightTargetCF = target:GetPivot()
+        end
+    end)
+
+    -- ถ้าหาเจอ → บินไปก่อน
+    if lightTargetCF then
+        print("🌟 Tween ไป Lights / Lighting ก่อน")
+        SkyTweenTo(lightTargetCF)
+        task.wait(1.5)
+    else
+        warn("❌ หา Lights ไม่เจอ ข้ามไป NPC เลย")
+    end
+    
+    -- =========================
+    -- 🔥 SNAP ไปหา NPC ทันที
+    -- =========================
     local npc = workspace:WaitForChild("MainLobby")
         :WaitForChild("NPC")
         :WaitForChild("Okabu")
 
-    local npcCF = npc:GetPivot()
+    local hrp = (Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait())
+        :WaitForChild("HumanoidRootPart")
 
-    -- 🚀 Tween ไปหาเลย
-    SkyTweenTo(npcCF * CFrame.new(0, 0, -5))
+    local npcPos = npc:GetPivot().Position
 
     -- รอให้นิ่งจริง
-    task.wait(2)
+    task.wait(0.5)
 
     --========================
     -- 🔥 ยิง Proximity (เวอร์ชันเสถียร)
