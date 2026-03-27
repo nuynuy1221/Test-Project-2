@@ -33,10 +33,38 @@ if game.PlaceId ~= targetPlace then
 		local lobby = workspace:FindFirstChild("MainLobby")
 		if not lobby then return end
 
+		-- 🔥 จัดการ Gamemodes
+		local gamemodes = lobby:FindFirstChild("Gamemodes")
+		if gamemodes then
+		
+			local play = gamemodes:FindFirstChild("Play")
+			if play then
+			
+				local keep = play:FindFirstChild("Lights / Lighting")
+
+				-- ลบทุกอย่างใน Play ยกเว้น Lights / Lighting
+				for _, obj in ipairs(play:GetChildren()) do
+					if obj ~= keep then
+						obj:Destroy()
+					end
+				end
+
+			end
+
+			-- ลบทุกอย่างใน Gamemodes ยกเว้น Play
+			for _, obj in ipairs(gamemodes:GetChildren()) do
+				if obj.Name ~= "Play" then
+					obj:Destroy()
+				end
+			end
+		end
+
+		-- 🧹 ลบตัวอื่นใน MainLobby เหมือนเดิม
 		for _, obj in ipairs(lobby:GetChildren()) do
 			if obj.Name ~= "NPC"
 			and obj.Name ~= "ChallengeBanner"
-			and obj.Name ~= "Credits" then
+			and obj.Name ~= "Credits"
+			and obj.Name ~= "Gamemodes" then
 				obj:Destroy()
 			end
 		end
