@@ -22,6 +22,51 @@ end
 
 task.wait(1)
 
+-- ======================
+-- NOT TARGET MAP SYSTEM
+-- ======================
+
+if game.PlaceId ~= targetPlace then
+	
+	-- 🧹 ลบ MainLobby (ยกเว้น 3 ตัว)
+	local function cleanMainLobby()
+		local lobby = workspace:FindFirstChild("MainLobby")
+		if not lobby then return end
+
+		for _, obj in ipairs(lobby:GetChildren()) do
+			if obj.Name ~= "NPC"
+			and obj.Name ~= "ChallengeBanner"
+			and obj.Name ~= "Credits" then
+				obj:Destroy()
+			end
+		end
+	end
+
+	-- 🧱 พื้นล่องหน
+	local function createInvisibleFloor()
+		if workspace:FindFirstChild("InvisibleFloor") then return end
+
+		local floor = Instance.new("Part")
+		floor.Name = "InvisibleFloor"
+		floor.Size = Vector3.new(5000,1,5000)
+		floor.Position = Vector3.new(0,4,0)
+		floor.Anchored = true
+		floor.CanCollide = true
+		floor.Transparency = 1
+		floor.Parent = workspace
+	end
+
+	cleanMainLobby()
+	createInvisibleFloor()
+
+	-- 🔁 กันของ spawn ใหม่
+	task.spawn(function()
+		while task.wait(5) do
+			cleanMainLobby()
+		end
+	end)
+end
+
 local DEL_TEXTURE=true
 local DEL_BACKGROUND=true
 local DEL_OBJECTS=true
