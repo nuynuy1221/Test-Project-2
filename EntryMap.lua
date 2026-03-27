@@ -259,21 +259,15 @@ function DoEnemyIndexFlow_Sky()
     local player = Players.LocalPlayer
     local hrp = (player.Character or player.CharacterAdded:Wait()):WaitForChild("HumanoidRootPart")
 
-    local folder = workspace.MainLobby.Gamemodes.Play["Lights / Lighting"]
-    local target = folder:GetChildren()[9]
-    if not target then
-        isRunningEnemyFlow = false
-        return false
-    end
+    -- 📍 ไปหา Okabu ตรง ๆ
+    local npc = workspace:WaitForChild("MainLobby")
+        :WaitForChild("NPC")
+        :WaitForChild("Okabu")
 
-    local part = target:FindFirstChildWhichIsA("BasePart")
-    if not part then
-        isRunningEnemyFlow = false
-        return false
-    end
+    local npcCF = npc:GetPivot()
 
-    -- 🚀 Tween
-    SkyTweenTo(part.CFrame * CFrame.new(0,0,-5))
+    -- 🚀 Tween ไปหาเลย
+    SkyTweenTo(npcCF * CFrame.new(0, 0, -5))
 
     -- รอให้นิ่งจริง
     task.wait(2)
