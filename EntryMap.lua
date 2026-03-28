@@ -11,7 +11,8 @@ end
 if getgenv().Config == nil then
     getgenv().Config = {
         BuyMemoria = false,
-        LockLV = nil
+        LockLV = nil,
+        CustomRR = false
     }
 end
 
@@ -19,13 +20,15 @@ local Config = getgenv().Config
 if type(Config) ~= "table" then
     Config = {
         BuyMemoria = false,
-        LockLV = nil
+        LockLV = nil,
+        CustomRR = false
     }
     getgenv().Config = Config
 end
 
 -- บังคับให้เปิดได้เฉพาะ true เท่านั้น
 Config.BuyMemoria = (Config.BuyMemoria == true)
+Config.CustomRR = (Config.CustomRR == true)
 
 -- LockLV ต้องเป็นตัวเลขเท่านั้น
 if type(Config.LockLV) ~= "number" then
@@ -473,14 +476,18 @@ task.spawn(function()
             )
                     
             -- ✅ เช็ค Milestone ก่อนทุกอย่าง
-            if level >= 30 then
-                if hasUnclaimedMilestone() then
-                    task.wait(5)
-                    playMilestoneLevel()
-                    print("💠 ไปเก็บ Enemy Index")
-                    task.wait(5)
-                    return -- ❗ ข้าม logic อื่นทั้งหมด
+            if Config.CustomRR then
+                if level >= 30 then
+                    if hasUnclaimedMilestone() then
+                        task.wait(5)
+                        playMilestoneLevel()
+                        print("💠 ไปเก็บ Enemy Index")
+                        task.wait(5)
+                        return
+                    end
                 end
+            else
+                print("⏭️ ข้าม Enemy Milestone เพราะปิด CustomRR")
             end
 
             -- ❌ ไม่เข้า Story แล้ว ไม่สน Level
