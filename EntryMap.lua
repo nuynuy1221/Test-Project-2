@@ -504,6 +504,8 @@ task.spawn(function()
                     else        
                         print("✅ มีของครบอยู่แล้ว (ไม่ล็อคเลเวล)")
                         DelayCheck = 600
+                        task.wait(60)
+                        GoWinter()
                     end
                 elseif level >= Config.LockLV then
                     if presents >= 1500 and presents < 7500 then
@@ -515,6 +517,8 @@ task.spawn(function()
                     else
                         print("🔒 ถึงเลเวลที่ล็อคแล้ว อยู่เฉยๆ")
                         DelayCheck = 600
+                        task.wait(60)
+                        GoWinter()
                     end
                 else
                     if presents >= 1500 and presents < 7500 then
