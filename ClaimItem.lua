@@ -64,7 +64,10 @@ task.spawn(function()
     local codes = {
         "150KYT",
         "LATECUSTOMLEVEL",
-        "MOONLESS"
+        "MOONLESS",
+        "ExtraWeek",
+        "Shinobi",
+        "HeIsComing"
     }
 
     print("เริ่มรีดีมโค้ด...")
