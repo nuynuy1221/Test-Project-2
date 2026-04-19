@@ -37,15 +37,12 @@ task.spawn(function()
 		g /= #keypoints
 		b /= #keypoints
 
-		if g < r or g < b then
-			return true
-		end
-
-		return false
+		-- ถ้าเขียวไม่เด่น = OFF
+		return (g < r or g < b)
 	end
 
 	--=========================
-	-- SETTINGS
+	-- SETTINGS (เปิด Toggle ต่างๆ)
 	--=========================
 	local settingsList = {
 		{ Name = "AutoSkipWaves", Path = playerGui.Windows.Settings.Holder.Main.ScrollingFrame.Gameplay.AutoSkipWaves.Slider.UIStroke.UIGradient },
@@ -57,51 +54,45 @@ task.spawn(function()
 		{ Name = "SkipSummonAnimation", Path = playerGui.Windows.Settings.Holder.Main.ScrollingFrame.Miscellaneous.SkipSummonAnimation.Slider.UIStroke.UIGradient },
 		{ Name = "DisableDamageIndicators", Path = playerGui.Windows.Settings.Holder.Main.ScrollingFrame.Units.DisableDamageIndicators.Slider.UIStroke.UIGradient },
 		{ Name = "DisableVisualEffects", Path = playerGui.Windows.Settings.Holder.Main.ScrollingFrame.Units.DisableVisualEffects.Slider.UIStroke.UIGradient },
+		{ Name = "DisableEnemyTags", Path = game:GetService("Players").LocalPlayer.PlayerGui.Windows.Settings.Holder.Main.ScrollingFrame.Enemies.DisableEnemyTags.Slider.UIGradient },
 	}
 
 	for _,setting in ipairs(settingsList) do
-
 		if isOff(setting.Path) then
 			print("🔥 TOGGLE:",setting.Name)
 			SettingsEvent:FireServer("Toggle",setting.Name)
 			task.wait(0.08)
 		end
-
 	end
 
-
 	--=========================
-	-- AUT OSELL (REMOTE)
+	-- 🔥 FORCE AUTO SELL (Memoria + Unit)
 	--=========================
+	task.wait(0.5)
 
-	task.wait(1)
+	local raritiesList = {"Rare","Epic","Legendary","Mythic"}
 
-	local rarities = playerGui.Windows.Summon.Holder.Box.AutoSell.Rarities
+	for _,rarity in ipairs(raritiesList) do
 
-	local list = {
-		{UI = rarities.Rare, Name = "Rare"},
-		{UI = rarities.Epic, Name = "Epic"},
-		{UI = rarities.Legendary, Name = "Legendary"},
-		{UI = rarities.Mythic, Name = "Mythic"}
-	}
+		-- Memoria
+		SettingsEvent:FireServer("ChangeValue", {
+			["Value"] = rarity,
+			["Name"] = "AutoSellMemorias",
+			["DeepValue"] = true
+		})
+		print("🧠 Sell Memoria:",rarity)
+		task.wait(0.1)
 
-	for _,data in ipairs(list) do
-
-		local gradient = data.UI.UIStroke.EnabledGradient
-
-		print("CHECK AUT OSELL:",data.Name)
-
-		if gradient.Enabled then
-			print("✅ ALREADY ON:",data.Name)
-
-		else
-			print("🔥 ENABLE:",data.Name)
-
-			SettingsEvent:FireServer("Toggle",data.Name)
-
-			task.wait(0.15)
-		end
-
+		-- Unit
+		SettingsEvent:FireServer("ChangeValue", {
+			["Value"] = rarity,
+			["Name"] = "AutoSellUnits",
+			["DeepValue"] = true
+		})
+		print("⚔️ Sell Unit:",rarity)
+		task.wait(0.1)
 	end
+
+	print("✅ ตั้งค่า Auto Sell ครบแล้ว")
 
 end)
