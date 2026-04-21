@@ -67,7 +67,8 @@ task.spawn(function()
         "MOONLESS",
         "ExtraWeek",
         "Shinobi",
-        "HeIsComing"
+        "HeIsComing",
+        "TooMuchPain"
     }
 
     print("เริ่มรีดีมโค้ด...")
