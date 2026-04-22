@@ -366,7 +366,7 @@ function DoEnemyIndexFlow_Sky()
             SelectDialogueOption(btn)
         end
 
-        task.wait(0.1) -- กันเฟรมค้าง
+        task.wait(1) -- กันเฟรมค้าง
     until playerGui:FindFirstChild("EnemyIndex") -- loop จน EnemyIndex GUI ขึ้น
 
     print("✅ EnemyIndex GUI ขึ้นแล้ว!")
@@ -394,7 +394,7 @@ function DoEnemyIndexFlow_Sky()
             end
         end
 
-        task.wait(0.2) -- กันเฟรมค้าง
+        task.wait(2) -- กันเฟรมค้าง
     until playerGui:FindFirstChild("EnemyMilestones") -- loop จน GUI EnemyMilestones ขึ้น
 
     print("✅ EnemyMilestones GUI ขึ้นแล้ว!")
