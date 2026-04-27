@@ -238,6 +238,21 @@ local function ClickGuiCenter(guiObject)
     VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, game, 0)
 end
 
+local function clickCenterScreenSafe()
+    if not Camera then return end
+
+    local size = Camera.ViewportSize
+    local x = size.X / 2
+    local y = size.Y / 2
+
+    -- ยิงเข้า CoreGui → ไม่โดน GUI เกม
+    VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, game:GetService("CoreGui"), 0)
+    task.wait()
+    VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, game:GetService("CoreGui"), 0)
+
+    print("🖱️ Click กลางจอ")
+end
+
 local GuiService = game:GetService("GuiService")
 
 local function SelectDialogueOption(btn)
@@ -501,6 +516,7 @@ task.spawn(function()
                     elseif presents >= 7500 then
                         summonEvent:FireServer(unpack(summonArgs50))
                         task.wait(0.1)
+                        clickCenterScreenSafe()
                     else        
                         print("✅ มีของครบอยู่แล้ว (ไม่ล็อคเลเวล)")
                         DelayCheck = 600
@@ -514,6 +530,7 @@ task.spawn(function()
                     elseif presents >= 7500 then
                         summonEvent:FireServer(unpack(summonArgs50))
                         task.wait(0.1)
+                        clickCenterScreenSafe()
                     else
                         print("🔒 ถึงเลเวลที่ล็อคแล้ว อยู่เฉยๆ")
                         DelayCheck = 600
@@ -527,6 +544,7 @@ task.spawn(function()
                     elseif presents >= 7500 then
                         summonEvent:FireServer(unpack(summonArgs50))
                         task.wait(0.1)
+                        clickCenterScreenSafe()
                     else
                         print("📈 เวลไม่ถึง ล็อคไว้ ต้องไปฟาร์ม")
                         task.wait(60)
@@ -564,11 +582,13 @@ task.spawn(function()
                     print("⁉️ มีแค่ Memoria")
                     summonEvent:FireServer(unpack(summonArgs50))
                     task.wait(0.1)
+                    clickCenterScreenSafe()
                 elseif not hasMemoria and hasUnit then
                     if Config.BuyMemoria then
                         print("⁉️ มีแค่ Ice Queen (Release)")
                         summonEvent:FireServer(unpack(memoriaArgs50))
                         task.wait(0.1)
+                        clickCenterScreenSafe()
                     else
                         print("❌ ไม่มี Config Memoria")
                     end
@@ -579,10 +599,12 @@ task.spawn(function()
                         print("❎ มี Config Memoria")
                         summonEvent:FireServer(unpack(memoriaArgs50))
                         task.wait(1)
+                        clickCenterScreenSafe()
                     else
                         print("❎ ไม่มี Config Memoria")
                         summonEvent:FireServer(unpack(summonArgs50))
                         task.wait(1)
+                        clickCenterScreenSafe()
                     end
                 end
             else
